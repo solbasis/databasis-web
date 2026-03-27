@@ -7,14 +7,110 @@
   <title>BASIS</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/hero.css">
 </head>
 <body>
 
-  <!-- Sections will be added here one by one -->
+  <!-- ── Background effects ── -->
+  <canvas id="grid-canvas"></canvas>
+  <div class="screen-glow"></div>
+  <div class="crt-flicker"></div>
+  <div class="crt-overlay"></div>
+  <div class="noise"></div>
+
+  <!-- ══════════════════════════════════════════════════════════════ -->
+  <!-- SECTION 1 — HERO                                             -->
+  <!-- ══════════════════════════════════════════════════════════════ -->
+  <header class="hero">
+
+    <!-- Pixel logo -->
+    <div class="logo-wrap" aria-label="BASIS">
+      <svg class="pixel-logo" viewBox="0 0 586 110" role="img" aria-label="BASIS">
+        <g transform="translate(-40,0)">
+          <!-- B -->
+          <rect x="40"  y="10" width="10" height="10" rx="1"/><rect x="54"  y="10" width="10" height="10" rx="1"/><rect x="68"  y="10" width="10" height="10" rx="1"/><rect x="82"  y="10" width="10" height="10" rx="1"/>
+          <rect x="40"  y="24" width="10" height="10" rx="1"/><rect x="96"  y="24" width="10" height="10" rx="1"/>
+          <rect x="40"  y="38" width="10" height="10" rx="1"/><rect x="96"  y="38" width="10" height="10" rx="1"/>
+          <rect x="40"  y="52" width="10" height="10" rx="1"/><rect x="54"  y="52" width="10" height="10" rx="1"/><rect x="68"  y="52" width="10" height="10" rx="1"/><rect x="82"  y="52" width="10" height="10" rx="1"/>
+          <rect x="40"  y="66" width="10" height="10" rx="1"/><rect x="96"  y="66" width="10" height="10" rx="1"/>
+          <rect x="40"  y="80" width="10" height="10" rx="1"/><rect x="96"  y="80" width="10" height="10" rx="1"/>
+          <rect x="40"  y="94" width="10" height="10" rx="1"/><rect x="54"  y="94" width="10" height="10" rx="1"/><rect x="68"  y="94" width="10" height="10" rx="1"/><rect x="82"  y="94" width="10" height="10" rx="1"/>
+          <!-- A -->
+          <rect x="174" y="10" width="10" height="10" rx="1"/><rect x="188" y="10" width="10" height="10" rx="1"/><rect x="202" y="10" width="10" height="10" rx="1"/>
+          <rect x="160" y="24" width="10" height="10" rx="1"/><rect x="216" y="24" width="10" height="10" rx="1"/>
+          <rect x="160" y="38" width="10" height="10" rx="1"/><rect x="216" y="38" width="10" height="10" rx="1"/>
+          <rect x="160" y="52" width="10" height="10" rx="1"/><rect x="174" y="52" width="10" height="10" rx="1"/><rect x="188" y="52" width="10" height="10" rx="1"/><rect x="202" y="52" width="10" height="10" rx="1"/><rect x="216" y="52" width="10" height="10" rx="1"/>
+          <rect x="160" y="66" width="10" height="10" rx="1"/><rect x="216" y="66" width="10" height="10" rx="1"/>
+          <rect x="160" y="80" width="10" height="10" rx="1"/><rect x="216" y="80" width="10" height="10" rx="1"/>
+          <rect x="160" y="94" width="10" height="10" rx="1"/><rect x="216" y="94" width="10" height="10" rx="1"/>
+          <!-- S -->
+          <rect x="294" y="10" width="10" height="10" rx="1"/><rect x="308" y="10" width="10" height="10" rx="1"/><rect x="322" y="10" width="10" height="10" rx="1"/><rect x="336" y="10" width="10" height="10" rx="1"/>
+          <rect x="280" y="24" width="10" height="10" rx="1"/>
+          <rect x="280" y="38" width="10" height="10" rx="1"/>
+          <rect x="294" y="52" width="10" height="10" rx="1"/><rect x="308" y="52" width="10" height="10" rx="1"/><rect x="322" y="52" width="10" height="10" rx="1"/>
+          <rect x="336" y="66" width="10" height="10" rx="1"/>
+          <rect x="336" y="80" width="10" height="10" rx="1"/>
+          <rect x="280" y="94" width="10" height="10" rx="1"/><rect x="294" y="94" width="10" height="10" rx="1"/><rect x="308" y="94" width="10" height="10" rx="1"/><rect x="322" y="94" width="10" height="10" rx="1"/>
+          <!-- I -->
+          <rect x="400" y="10" width="10" height="10" rx="1"/><rect x="414" y="10" width="10" height="10" rx="1"/><rect x="428" y="10" width="10" height="10" rx="1"/>
+          <rect x="414" y="24" width="10" height="10" rx="1"/><rect x="414" y="38" width="10" height="10" rx="1"/><rect x="414" y="52" width="10" height="10" rx="1"/><rect x="414" y="66" width="10" height="10" rx="1"/><rect x="414" y="80" width="10" height="10" rx="1"/>
+          <rect x="400" y="94" width="10" height="10" rx="1"/><rect x="414" y="94" width="10" height="10" rx="1"/><rect x="428" y="94" width="10" height="10" rx="1"/>
+          <!-- S -->
+          <rect x="514" y="10" width="10" height="10" rx="1"/><rect x="528" y="10" width="10" height="10" rx="1"/><rect x="542" y="10" width="10" height="10" rx="1"/><rect x="556" y="10" width="10" height="10" rx="1"/>
+          <rect x="500" y="24" width="10" height="10" rx="1"/>
+          <rect x="500" y="38" width="10" height="10" rx="1"/>
+          <rect x="514" y="52" width="10" height="10" rx="1"/><rect x="528" y="52" width="10" height="10" rx="1"/><rect x="542" y="52" width="10" height="10" rx="1"/>
+          <rect x="556" y="66" width="10" height="10" rx="1"/>
+          <rect x="556" y="80" width="10" height="10" rx="1"/>
+          <rect x="500" y="94" width="10" height="10" rx="1"/><rect x="514" y="94" width="10" height="10" rx="1"/><rect x="528" y="94" width="10" height="10" rx="1"/><rect x="542" y="94" width="10" height="10" rx="1"/>
+        </g>
+      </svg>
+    </div>
+
+    <!-- Ghost reflection -->
+    <div class="logo-reflection" aria-hidden="true">
+      <svg class="pixel-logo" viewBox="0 0 586 110">
+        <g transform="translate(-40,0)">
+          <rect x="40"  y="10" width="10" height="10" rx="1"/><rect x="54"  y="10" width="10" height="10" rx="1"/><rect x="68"  y="10" width="10" height="10" rx="1"/><rect x="82"  y="10" width="10" height="10" rx="1"/>
+          <rect x="40"  y="24" width="10" height="10" rx="1"/><rect x="96"  y="24" width="10" height="10" rx="1"/>
+          <rect x="40"  y="38" width="10" height="10" rx="1"/><rect x="96"  y="38" width="10" height="10" rx="1"/>
+          <rect x="40"  y="52" width="10" height="10" rx="1"/><rect x="54"  y="52" width="10" height="10" rx="1"/><rect x="68"  y="52" width="10" height="10" rx="1"/><rect x="82"  y="52" width="10" height="10" rx="1"/>
+          <rect x="174" y="10" width="10" height="10" rx="1"/><rect x="188" y="10" width="10" height="10" rx="1"/><rect x="202" y="10" width="10" height="10" rx="1"/>
+          <rect x="160" y="24" width="10" height="10" rx="1"/><rect x="216" y="24" width="10" height="10" rx="1"/>
+          <rect x="160" y="38" width="10" height="10" rx="1"/><rect x="216" y="38" width="10" height="10" rx="1"/>
+          <rect x="160" y="52" width="10" height="10" rx="1"/><rect x="174" y="52" width="10" height="10" rx="1"/><rect x="188" y="52" width="10" height="10" rx="1"/><rect x="202" y="52" width="10" height="10" rx="1"/><rect x="216" y="52" width="10" height="10" rx="1"/>
+          <rect x="294" y="10" width="10" height="10" rx="1"/><rect x="308" y="10" width="10" height="10" rx="1"/><rect x="322" y="10" width="10" height="10" rx="1"/><rect x="336" y="10" width="10" height="10" rx="1"/>
+          <rect x="280" y="24" width="10" height="10" rx="1"/>
+          <rect x="294" y="52" width="10" height="10" rx="1"/><rect x="308" y="52" width="10" height="10" rx="1"/><rect x="322" y="52" width="10" height="10" rx="1"/>
+          <rect x="400" y="10" width="10" height="10" rx="1"/><rect x="414" y="10" width="10" height="10" rx="1"/><rect x="428" y="10" width="10" height="10" rx="1"/>
+          <rect x="414" y="24" width="10" height="10" rx="1"/><rect x="414" y="38" width="10" height="10" rx="1"/><rect x="414" y="52" width="10" height="10" rx="1"/>
+          <rect x="514" y="10" width="10" height="10" rx="1"/><rect x="528" y="10" width="10" height="10" rx="1"/><rect x="542" y="10" width="10" height="10" rx="1"/><rect x="556" y="10" width="10" height="10" rx="1"/>
+          <rect x="500" y="24" width="10" height="10" rx="1"/>
+          <rect x="514" y="52" width="10" height="10" rx="1"/><rect x="528" y="52" width="10" height="10" rx="1"/><rect x="542" y="52" width="10" height="10" rx="1"/>
+        </g>
+      </svg>
+    </div>
+
+    <!-- Typing subtitle -->
+    <div class="subtitle-row">
+      <span class="prompt-symbol">root@basis:~$</span>
+      <span class="typed-text" id="typed"></span>
+      <span class="cursor-block" aria-hidden="true"></span>
+    </div>
+
+    <!-- Status bar -->
+    <div class="status-bar">
+      <span><span class="status-dot"></span> NETWORK ONLINE</span>
+      <span><span class="status-dot amber"></span> SYNCING BLOCKS</span>
+      <span><span class="status-dot"></span> $BASIS ACTIVE</span>
+    </div>
+  </header>
+
+  <!-- More sections will be added here -->
 
   <script src="js/main.js" type="module"></script>
 </body>

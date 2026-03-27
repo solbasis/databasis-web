@@ -1,2 +1,7 @@
 // ─── BASIS Website — Main Entry ──────────────────────────────────────────────
-// Sections will be wired up here as they are built.
+import { initTyping, initGrid } from './hero.js';
+
+document.addEventListener('DOMContentLoaded', () => {
+  initGrid();
+  initTyping();
+});
