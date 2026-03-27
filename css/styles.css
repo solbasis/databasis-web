@@ -140,8 +140,12 @@ body {
   flex-wrap: wrap;
 }
 
-.btn:active       { transform: translateY(0) scale(0.985); }
+.btn:active        { transform: translateY(0) scale(0.985); }
 .btn:focus-visible { outline: 2px solid var(--g); outline-offset: 3px; }
+.btn:disabled      { opacity: .35; cursor: not-allowed; transform: none !important; }
+
+/* Small button variant */
+.btn-sm { padding: 5px 11px; font-size: 0.72rem; min-height: 28px; }
 
 /* Button grid (auto-fit columns) */
 .btn-grid {
@@ -202,6 +206,15 @@ body {
   margin: 0 auto;
   padding: 0 20px 60px;
 }
+
+/* ─── Shared animations ──────────────────────────────────────────────────── */
+@keyframes blinkSlow {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.30; }
+}
+
+/* LIVE status indicator */
+.mstatus.live { color: var(--g); animation: blinkSlow 2.4s ease-in-out infinite; }
 
 /* ─── Reduced motion ─────────────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {

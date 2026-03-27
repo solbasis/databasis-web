@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="BASIS — $BASIS token holder map. Visualize the on-chain holder distribution.">
+  <title>BASIS — Holder Map</title>
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self' 'unsafe-inline';
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+    font-src 'self' https://fonts.gstatic.com;
+    connect-src 'self'
+      https://mainnet.helius-rpc.com
+      https://*.helius-rpc.com;
+    upgrade-insecure-requests;
+  ">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/map.css">
+</head>
+<body class="map-page">
+
+  <div class="sep"><span>HOLDER MAP</span></div>
+
+  <section class="panel">
+    <div class="mbar">
+      <div class="mbar-l">
+        <div class="dots">
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+        </div>
+        <div class="mlabel">BASIS://HOLDER-MAP</div>
+      </div>
+      <div class="mstatus" id="sts">LOADING</div>
+    </div>
+
+    <h2>&gt; $BASIS HOLDER MAP</h2>
+
+    <div class="controls">
+      <div class="search-wrap">
+        <span class="search-ico">⌕</span>
+        <input type="text" id="search" placeholder="Search wallet…" spellcheck="false">
+      </div>
+      <div class="ctrl-group">
+        <span>SHOW</span>
+        <select id="ctrlLimit">
+          <option value="100">Top 100</option>
+          <option value="250">Top 250</option>
+          <option value="500" selected>Top 500</option>
+          <option value="1000">Top 1000</option>
+          <option value="0">All holders</option>
+        </select>
+      </div>
+      <div class="ctrl-group">
+        <span>LABEL</span>
+        <select id="ctrlLabel">
+          <option value="amt" selected>Token amount</option>
+          <option value="addr">Wallet address</option>
+          <option value="pct">% of supply</option>
+          <option value="none">No labels</option>
+        </select>
+      </div>
+      <button class="btn btn-sm" id="exportBtn" disabled>[ EXPORT ]</button>
+      <button class="btn btn-sm" id="refreshBtn" disabled>[ REFRESH ]</button>
+    </div>
+
+    <div class="legend-bar" id="legendBar"></div>
+
+    <div class="map-outer" id="mapArea">
+      <canvas id="map"></canvas>
+
+      <div class="zm">
+        <div class="zm-btn" id="zIn"  title="Zoom in">+</div>
+        <div class="zm-btn" id="zOut" title="Zoom out">−</div>
+        <div class="zm-btn" id="zFit" title="Fit all" style="font-size:.64rem;font-weight:700">FIT</div>
+      </div>
+
+      <div class="ip" id="ip">
+        <div class="ip-hdr">
+          <div class="ip-hdr-l">
+            <div class="ip-dots">
+              <span class="ip-dot"></span>
+              <span class="ip-dot"></span>
+              <span class="ip-dot"></span>
+            </div>
+            <div class="ip-hdr-t">Wallet Info</div>
+          </div>
+          <button class="ip-x" id="ipX">✕</button>
+        </div>
+        <div class="ip-body">
+          <div class="ip-badge" id="ipBadge"></div>
+          <div class="ip-lbl">WALLET</div>
+          <div class="ip-addr" id="ipAddr"></div>
+          <div class="ip-lbl">HOLDINGS</div>
+          <div class="ip-amt"  id="ipAmt"></div>
+          <div class="ip-pct"  id="ipPct"></div>
+          <div class="ip-rank" id="ipRank"></div>
+          <div class="ip-spec" id="ipSpec"></div>
+          <a class="ip-link" id="ipLink" href="#" target="_blank" rel="noopener">[ VIEW ON ORBMARKETS → ]</a>
+        </div>
+      </div>
+
+      <div class="overlay" id="overlay">
+        <div class="ov-box">
+          <h3 id="ovTitle">Loading Holders…</h3>
+          <div class="ov-meta">
+            <span id="ovLabel">…</span>
+            <span id="ovPct">0%</span>
+          </div>
+          <div class="ov-track"><div class="ov-fill" id="ovFill"></div></div>
+          <div class="ov-phase" id="ovPhase"></div>
+        </div>
+      </div>
+
+      <div class="toast" id="toast"></div>
+    </div>
+
+    <div class="footer-row">
+      <div class="ftr-stats">
+        <span id="fH">Holders: —</span>
+        <span id="fSupply">Held: —</span>
+        <span id="fAvg">Avg: —</span>
+        <span id="fMed">Med: —</span>
+        <span id="fZ">Zoom: 100%</span>
+        <span id="fT">—</span>
+      </div>
+      <a class="btn btn-sm" href="index.html">[ ← BACK ]</a>
+    </div>
+  </section>
+
+  <div id="tip">
+    <div class="ta" id="hA"></div>
+    <div class="tv" id="hV"></div>
+    <div class="tt" id="hT"></div>
+  </div>
+
+  <script type="module" src="js/map.js"></script>
+</body>
+</html>
