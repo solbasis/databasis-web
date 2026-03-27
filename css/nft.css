@@ -1,0 +1,23 @@
+/* ─── Genesis / NFT Section ──────────────────────────────────────────────── */
+
+/* Sub-section divider within a panel */
+.builder-section {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px dashed var(--border);
+}
+
+.builder-section h2    { margin-bottom: 10px; }
+.builder-section .prose { margin-bottom: 14px; }
+
+/* Featured button variant */
+.btn-featured {
+  border-color: var(--g55);
+  background: var(--g06);
+  font-weight: 600;
+}
+
+.btn-featured:hover {
+  background: var(--g15);
+  box-shadow: 0 0 24px rgba(120, 177, 90, .35);
+}
