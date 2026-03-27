@@ -3,7 +3,154 @@ body {
   font-family: var(--mono);
   background: var(--bg);
   color: var(--text);
+  font-size: 0.94rem;
+  line-height: 1.75;
+  letter-spacing: 0.2px;
   overflow-x: hidden;
 }
 
-/* Sections will be added here as we build them */
+/* ─── Section separator ──────────────────────────────────────────────────── */
+.sep {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 22px 0 12px;
+  color: var(--text-dim);
+  font-size: 0.72rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  user-select: none;
+}
+.sep::before, .sep::after {
+  content: "";
+  flex: 1;
+  border-top: 1px dashed var(--border);
+}
+
+/* ─── Panel ──────────────────────────────────────────────────────────────── */
+.panel {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--r);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow), var(--glow);
+  padding: 20px;
+}
+@media (min-width: 768px) { .panel { padding: 24px; } }
+
+/* Scanlines */
+.panel::before {
+  content: "";
+  position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--scanline) 0px, var(--scanline) 1px,
+    transparent 1px, transparent 6px
+  );
+}
+.panel > * { position: relative; z-index: 1; }
+
+/* ─── Mac-style title bar ────────────────────────────────────────────────── */
+.mbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 9px 12px;
+  margin: -20px -20px 16px;
+  border-bottom: 1px solid var(--head-border);
+  background: linear-gradient(to right, var(--head-bg), transparent);
+}
+@media (min-width: 768px) {
+  .mbar { margin: -24px -24px 20px; }
+}
+
+.mbar-l  { display: flex; align-items: center; gap: 9px; }
+.dots    { display: flex; gap: 5px; }
+.dot {
+  width: 9px; height: 9px; border-radius: 50%;
+  border: 1px solid var(--border-hi);
+  background: rgba(0,0,0,0.3);
+}
+
+.mlabel {
+  font-size: 0.76rem;
+  letter-spacing: 1.4px;
+  color: var(--text-soft);
+  text-transform: uppercase;
+}
+
+.mstatus {
+  font-size: 0.72rem;
+  letter-spacing: 1px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+
+/* ─── Headings ───────────────────────────────────────────────────────────── */
+.panel h2 {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--g);
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+/* ─── Prose ──────────────────────────────────────────────────────────────── */
+.prose {
+  font-size: 0.88rem;
+  color: var(--text-soft);
+  line-height: 1.8;
+}
+
+/* ─── Buttons ────────────────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  border: 1px solid var(--g40);
+  border-radius: var(--r-sm);
+  background: transparent;
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 0.80rem;
+  letter-spacing: 1.1px;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: var(--glow);
+  transition: background 0.2s, border-color 0.2s, color 0.2s,
+              box-shadow 0.2s, transform 0.2s;
+}
+.btn:hover {
+  background: var(--g10);
+  border-color: var(--g);
+  color: var(--g);
+  box-shadow: var(--glow-lg);
+  transform: translateY(-1px);
+}
+
+.btn-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+
+/* ─── Page wrapper ───────────────────────────────────────────────────────── */
+.page {
+  position: relative;
+  z-index: 10;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 20px 60px;
+}
+
+/* ─── Reduced motion ─────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .panel::before { display: none; }
+  .btn { transition: none; }
+}
