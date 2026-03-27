@@ -1,0 +1,42 @@
+/* ─── Community Section ──────────────────────────────────────────────────── */
+
+.social-row {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+
+.social-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 24px;
+  border: 1px solid var(--g40);
+  border-radius: var(--r-sm);
+  color: var(--text);
+  text-decoration: none;
+  font-family: var(--mono);
+  font-size: 0.80rem;
+  font-weight: 500;
+  letter-spacing: 1.1px;
+  text-transform: uppercase;
+  box-shadow: var(--glow);
+  transition: border-color 0.17s, color 0.17s, box-shadow 0.17s, transform 0.17s;
+  min-height: 42px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.social-btn:hover {
+  color: var(--g);
+  border-color: var(--g);
+  box-shadow: var(--glow-lg);
+  transform: translateY(-1px);
+}
+
+.social-btn:active { transform: translateY(0) scale(0.985); }
+
+@media (prefers-reduced-motion: reduce) {
+  .social-btn { transition: none; }
+}
