@@ -1,0 +1,349 @@
+/* ─── On-Chain Tools Page ────────────────────────────────────────────────── */
+
+body.tools-page {
+  padding: 20px;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background: #000;
+}
+
+/* Panel spacing on tools page */
+body.tools-page .panel { margin-bottom: 24px; }
+@media (min-width: 768px) { body.tools-page .panel { margin-bottom: 26px; } }
+
+/* ─── Input Row (label + input + button) ─────────────────────────────────── */
+.inp-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+@media (min-width: 480px) {
+  .inp-row               { flex-direction: row; }
+  .inp-row .btn          { white-space: nowrap; flex-shrink: 0; }
+}
+
+.tool-input {
+  width: 100%;
+  background: rgba(0, 0, 0, .35);
+  border: 1px dashed var(--border);
+  border-radius: var(--r-sm);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 0.84rem;
+  padding: 11px 13px;
+  outline: none;
+  transition: border-color 0.18s, background 0.18s;
+  letter-spacing: 0.3px;
+  min-height: 42px;
+}
+
+.tool-input::placeholder { color: var(--text-mute); }
+
+.tool-input:focus {
+  border-color: var(--border-act);
+  background: rgba(0, 0, 0, .45);
+  box-shadow: 0 0 0 2px var(--g06);
+}
+
+/* ─── Primary button variant ─────────────────────────────────────────────── */
+.btn-primary {
+  border-color: var(--g55);
+  background: var(--g06);
+  font-weight: 600;
+}
+
+.btn-primary:hover {
+  background: var(--g15);
+  box-shadow: 0 0 22px rgba(120, 177, 90, .35);
+}
+
+/* ─── Result Box ─────────────────────────────────────────────────────────── */
+.rbox {
+  background: rgba(0, 0, 0, .28);
+  border: 1px dashed var(--border);
+  border-radius: var(--r-sm);
+  padding: 13px 14px;
+  min-height: 52px;
+  font-size: 0.83rem;
+  color: var(--text-soft);
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.rbox.ok  { border-color: var(--border-hi); background: rgba(0, 0, 0, .38); }
+.rbox.err { border-color: rgba(220, 80, 60, .35); background: rgba(60, 0, 0, .20); color: rgba(220, 100, 80, .90); }
+
+/* ─── Spinner ────────────────────────────────────────────────────────────── */
+.spin {
+  display: inline-block;
+  width: 13px; height: 13px;
+  border: 2px solid var(--g12);
+  border-top-color: var(--g);
+  border-radius: 50%;
+  animation: rotate 0.65s linear infinite;
+  margin-right: 8px;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+@keyframes rotate { to { transform: rotate(360deg); } }
+
+/* ─── NFT Grid ───────────────────────────────────────────────────────────── */
+.nft-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.nft-card {
+  background: rgba(0, 0, 0, .32);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  overflow: hidden;
+  text-align: center;
+  transition: border-color 0.18s, box-shadow 0.18s, transform 0.18s;
+}
+
+.nft-card:hover {
+  border-color: var(--border-act);
+  box-shadow: 0 0 12px rgba(120, 177, 90, .14);
+  transform: translateY(-2px);
+}
+
+.nft-img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  display: block;
+  background: var(--g06);
+}
+
+.nft-ph {
+  width: 100%;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--g06);
+  color: var(--text-mute);
+  font-size: 0.65rem;
+  letter-spacing: 1px;
+}
+
+.nft-name {
+  font-size: 0.70rem;
+  padding: 7px 8px;
+  color: var(--text-soft);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ─── Stat Cards ─────────────────────────────────────────────────────────── */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+@media (min-width: 600px) {
+  .stat-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+.stat-card {
+  background: rgba(0, 0, 0, .30);
+  border: 1px dashed var(--border);
+  border-radius: var(--r-sm);
+  padding: 14px 12px;
+  text-align: center;
+  transition: border-color 0.22s, box-shadow 0.22s;
+}
+
+.stat-card.lit {
+  border-color: var(--border-hi);
+  box-shadow: 0 0 10px rgba(120, 177, 90, .07);
+}
+
+.stat-label {
+  font-size: 0.66rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 7px;
+}
+
+.stat-val {
+  font-size: 1.0rem;
+  font-weight: 600;
+  color: #fff;
+  text-shadow: 0 0 8px rgba(120, 177, 90, .30);
+  line-height: 1.2;
+}
+
+.stat-val.idle    { color: var(--text-mute); font-size: 0.80rem; }
+.stat-val.loading { color: var(--text-mute); font-size: 0.80rem; animation: fade-p 1.6s ease-in-out infinite; }
+.stat-val.pos     { color: var(--pos); text-shadow: 0 0 8px rgba(80, 220, 80, .28); }
+.stat-val.neg     { color: var(--neg); text-shadow: 0 0 8px rgba(220, 80, 80, .22); }
+
+.stat-sub {
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  margin-top: 4px;
+  min-height: 14px;
+}
+
+@keyframes fade-p { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
+
+/* ─── PnL Bar ────────────────────────────────────────────────────────────── */
+.pnl-bar-wrap  { margin: 16px 0 6px; }
+
+.pnl-bar-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.70rem;
+  color: var(--text-dim);
+  margin-bottom: 7px;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.pnl-bar-track {
+  height: 7px;
+  background: var(--g06);
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid var(--g12);
+}
+
+.pnl-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.55s ease;
+}
+
+.pnl-bar-fill.pos { background: linear-gradient(to right, rgba(60, 160, 60, .7), var(--pos)); }
+.pnl-bar-fill.neg { background: linear-gradient(to right, rgba(180, 60, 60, .7), var(--neg)); }
+
+/* ─── Trade Table ────────────────────────────────────────────────────────── */
+.table-wrap {
+  overflow-x: auto;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, .18);
+}
+
+.trade-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.78rem;
+}
+
+.trade-table th {
+  text-align: left;
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-dim);
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  font-weight: 500;
+  white-space: nowrap;
+  background: rgba(0, 0, 0, .15);
+}
+
+.trade-table td {
+  padding: 9px 12px;
+  border-bottom: 1px dashed var(--border);
+  color: var(--text-soft);
+  vertical-align: middle;
+}
+
+.trade-table tr:last-child td  { border-bottom: 0; }
+.trade-table tbody tr:hover td { background: rgba(120, 177, 90, .03); }
+
+/* ─── Badges ─────────────────────────────────────────────────────────────── */
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 0.65rem;
+  letter-spacing: 1px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.b-buy  { background: rgba(60, 180, 60, .10); color: var(--pos); border: 1px solid rgba(60, 180, 60, .22); }
+.b-sell { background: rgba(220, 80, 80, .09); color: var(--neg); border: 1px solid rgba(220, 80, 80, .20); }
+
+/* ─── PnL colours ────────────────────────────────────────────────────────── */
+.pnl-pos { color: var(--pos); font-weight: 600; }
+.pnl-neg { color: var(--neg); font-weight: 600; }
+.pnl-neu { color: var(--text-mute); font-size: 0.72rem; }
+
+/* ─── Misc ───────────────────────────────────────────────────────────────── */
+.divider {
+  border: none;
+  border-top: 1px dashed var(--border);
+  margin: 18px 0;
+}
+
+.empty {
+  text-align: center;
+  padding: 30px 14px;
+  color: var(--text-mute);
+  font-size: 0.78rem;
+  letter-spacing: 1.2px;
+}
+
+/* ─── Fetch Log ──────────────────────────────────────────────────────────── */
+.fetch-log {
+  background: rgba(0, 0, 0, .30);
+  border: 1px dashed var(--border);
+  border-radius: var(--r-sm);
+  padding: 12px 14px;
+  font-size: 0.74rem;
+  color: var(--text-dim);
+  line-height: 2.0;
+  max-height: 130px;
+  overflow-y: auto;
+  margin-bottom: 14px;
+  display: none;
+  font-family: var(--mono);
+}
+
+.fetch-log.show { display: block; }
+
+.ll      { display: block; }
+.ll.ok   { color: rgba(120, 177, 90, .80); }
+.ll.warn { color: rgba(200, 175, 70, .85); }
+.ll.err  { color: rgba(220, 90, 70, .85); }
+
+/* ─── Panel footer ───────────────────────────────────────────────────────── */
+.panel-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.trade-count {
+  font-size: 0.70rem;
+  color: var(--text-dim);
+}
+
+/* ─── Responsive ─────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  body.tools-page         { padding: 12px; }
+  body.tools-page .panel  { padding: 16px; }
+  body.tools-page .mbar   { margin: -16px -16px 14px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spin, .stat-val.loading { animation: none !important; }
+  .btn, .tool-input, .rbox, .stat-card, .nft-card, .pnl-bar-fill { transition: none !important; }
+}

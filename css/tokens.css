@@ -32,8 +32,8 @@
   --text-mute: rgba(120, 177, 90, .30);
 
   /* Semantic */
-  --pos:  #78b15a;
-  --neg:  #dc5a46;
+  --pos:  #6dd97d;
+  --neg:  #e07070;
   --warn: #c8a832;
 
   /* Effects */
@@ -80,7 +80,7 @@
   --text-soft: rgba(20, 40, 15, .75);
   --text-mute: rgba(20, 40, 15, .35);
 
-  --pos:  #3a7a28;
+  --pos:  #3a9e4a;
   --neg:  #c04030;
   --warn: #8a7020;
 

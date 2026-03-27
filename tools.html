@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="BASIS On-Chain Tools — balance checker, NFT scan, and $BASIS PnL performance monitor.">
+  <title>BASIS — On-Chain Tools</title>
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self' 'unsafe-inline';
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+    font-src 'self' https://fonts.gstatic.com;
+    img-src 'self' https: data:;
+    connect-src 'self'
+      https://mainnet.helius-rpc.com
+      https://*.helius-rpc.com
+      https://api-mainnet.helius-rpc.com
+      https://ipfs.io
+      https://arweave.net;
+    upgrade-insecure-requests;
+  ">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/tools.css">
+</head>
+<body class="tools-page">
+
+  <!-- ═══════════════════════════════
+       1 · BALANCE CHECKER
+  ═══════════════════════════════ -->
+  <div class="sep"><span>ON-CHAIN TOOLS</span></div>
+  <section class="panel" aria-label="Token balance checker">
+    <div class="mbar">
+      <div class="mbar-l">
+        <div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+        <div class="mlabel">BASIS://BALANCE-CHECK</div>
+      </div>
+      <div class="mstatus" id="balStatus">READY</div>
+    </div>
+    <h2>&gt; TOKEN BALANCE CHECKER</h2>
+    <p class="prose">Enter any Solana wallet address to query its SOL and $BASIS token balance on-chain.</p>
+    <div class="inp-row">
+      <input type="text" id="balWallet" class="tool-input" placeholder="Wallet address (e.g. 7xKXtg…)"
+             autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" aria-label="Wallet address">
+      <button type="button" class="btn btn-primary" id="balBtn">[ CHECK ]</button>
+    </div>
+    <div class="rbox" id="balResult">
+      <span style="color:var(--text-mute);font-size:0.76rem;letter-spacing:1px;">AWAITING INPUT…</span>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════
+       2 · NFT HOLDER CHECKER
+  ═══════════════════════════════ -->
+  <div class="sep"><span>NFT SCAN</span></div>
+  <section class="panel" aria-label="BASIS Genesis NFT holder checker">
+    <div class="mbar">
+      <div class="mbar-l">
+        <div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+        <div class="mlabel">BASIS://NFT-SCAN</div>
+      </div>
+      <div class="mstatus" id="nftStatus">READY</div>
+    </div>
+    <h2>&gt; GENESIS NFT HOLDER SCAN</h2>
+    <p class="prose">Enter a Solana wallet to check if it holds any <strong>BASIS Genesis NFTs</strong> from the official collection.</p>
+    <div class="inp-row">
+      <input type="text" id="nftWallet" class="tool-input" placeholder="Wallet address (e.g. 7xKXtg…)"
+             autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" aria-label="Wallet address">
+      <button type="button" class="btn btn-primary" id="nftBtn">[ SCAN ]</button>
+    </div>
+    <div class="rbox" id="nftResult">
+      <span style="color:var(--text-mute);font-size:0.76rem;letter-spacing:1px;">AWAITING INPUT…</span>
+    </div>
+    <div class="nft-grid" id="nftGrid" style="display:none;" aria-live="polite"></div>
+  </section>
+
+  <!-- ═══════════════════════════════
+       3 · PERFORMANCE MONITOR
+  ═══════════════════════════════ -->
+  <div class="sep"><span>PERFORMANCE MONITOR</span></div>
+  <section class="panel" aria-label="$BASIS trading performance monitor">
+    <div class="mbar">
+      <div class="mbar-l">
+        <div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+        <div class="mlabel">BASIS://PNL-MONITOR</div>
+      </div>
+      <div class="mstatus" id="pnlStatus">READY</div>
+    </div>
+    <h2>&gt; $BASIS TRADING PERFORMANCE</h2>
+
+    <div class="inp-row">
+      <input type="text" id="pnlWallet" class="tool-input" placeholder="Wallet address — auto-fetch all $BASIS trades"
+             autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" aria-label="Wallet address for performance monitor">
+      <button type="button" class="btn btn-primary" id="pnlBtn">[ ANALYZE ]</button>
+    </div>
+
+    <div class="fetch-log" id="fetchLog" aria-live="polite"></div>
+
+    <!-- Stat Cards -->
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-label">REALIZED PNL</div>
+        <div class="stat-val idle" id="sRPnl">—</div>
+        <div class="stat-sub">Closed positions</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">UNREALIZED PNL</div>
+        <div class="stat-val idle" id="sUPnl">—</div>
+        <div class="stat-sub" id="sUPnlSub">Open positions</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">TOTAL ROI</div>
+        <div class="stat-val idle" id="sRoi">—</div>
+        <div class="stat-sub">Return on invested</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">WIN RATE</div>
+        <div class="stat-val idle" id="sWin">—</div>
+        <div class="stat-sub" id="sWinSub">W / L trades</div>
+      </div>
+    </div>
+
+    <!-- PnL Bar -->
+    <div class="pnl-bar-wrap">
+      <div class="pnl-bar-meta">
+        <span>PNL VS INVESTED CAPITAL</span>
+        <span id="barMeta">—</span>
+      </div>
+      <div class="pnl-bar-track">
+        <div class="pnl-bar-fill pos" id="pnlBarFill" style="width:0%;"></div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Trade Table -->
+    <div class="table-wrap">
+      <table class="trade-table" aria-label="$BASIS trade history">
+        <thead>
+          <tr>
+            <th>TYPE</th>
+            <th>$BASIS AMT</th>
+            <th>PRICE (USD)</th>
+            <th>TOTAL (USD)</th>
+            <th>REALIZED PNL</th>
+            <th>DATE</th>
+            <th>TX</th>
+          </tr>
+        </thead>
+        <tbody id="tradeBody">
+          <tr><td colspan="7"><div class="empty">ENTER A WALLET AND CLICK ANALYZE</div></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="panel-foot">
+      <div class="trade-count" id="tradeCount">0 trades found</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button type="button" class="btn btn-sm" id="clearBtn">[ CLEAR ]</button>
+        <button type="button" class="btn btn-sm" id="exportBtn">[ EXPORT CSV ]</button>
+      </div>
+    </div>
+  </section>
+
+  <div style="text-align:center;padding:16px 0 32px;">
+    <a class="btn btn-sm" href="index.html">[ ← BACK TO MAIN ]</a>
+  </div>
+
+  <script type="module" src="js/tools.js"></script>
+</body>
+</html>
