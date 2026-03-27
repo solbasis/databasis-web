@@ -1,0 +1,30 @@
+/* ─── Security Section ───────────────────────────────────────────────────── */
+
+.note {
+  padding: 14px 16px;
+  border: 1px dashed var(--border-hi);
+  background: rgba(0, 0, 0, .28);
+  border-radius: var(--r-sm);
+  font-size: 0.85rem;
+  color: var(--text-soft);
+  line-height: 1.85;
+  word-break: break-word;
+}
+
+.note strong { color: #fff; font-weight: 600; }
+
+.note .addr {
+  display: block;
+  margin-top: 10px;
+  font-size: 0.80rem;
+  color: #fff;
+  word-break: break-all;
+  text-shadow: 0 0 8px rgba(120, 177, 90, .30);
+}
+
+.sub-note {
+  margin-top: 14px;
+  font-size: 0.84rem;
+  color: var(--text-dim);
+  line-height: 1.8;
+}
