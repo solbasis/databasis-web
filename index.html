@@ -5,6 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="BASIS — The data layer of Solana.">
   <title>BASIS</title>
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self' 'unsafe-inline';
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+    font-src 'self' https://fonts.gstatic.com;
+    connect-src 'self'
+      https://api.dexscreener.com
+      https://lite-api.jup.ag
+      https://mainnet.helius-rpc.com
+      https://*.helius-rpc.com;
+    upgrade-insecure-requests;
+  ">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
@@ -12,6 +24,7 @@
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/hero.css">
+  <link rel="stylesheet" href="css/prices.css">
 </head>
 <body>
 
@@ -143,6 +156,48 @@
         <a href="https://chat.databasis.info/" target="_blank" rel="noopener noreferrer" class="btn">
           [ OPEN CHATROOM ]
         </a>
+      </div>
+    </section>
+
+  </main>
+
+    <div class="sep"><span>LIVE PRICES</span></div>
+
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <!-- SECTION 3 — LIVE PRICES                                      -->
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <section class="panel" aria-label="Live price feed">
+      <div class="mbar">
+        <div class="mbar-l">
+          <div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+          <div class="mlabel">BASIS://PRICE-FEED</div>
+        </div>
+        <div class="mstatus live" id="tickerStatus">FETCHING</div>
+      </div>
+
+      <h2>&gt; SOL / $BASIS PRICE FEED</h2>
+
+      <div class="price-grid">
+        <div class="price-card" id="cardSol">
+          <div class="pc-label">SOL PRICE</div>
+          <div class="pc-val loading" id="solPrice">LOADING</div>
+          <div class="pc-sub">USD</div>
+        </div>
+        <div class="price-card" id="cardBasis">
+          <div class="pc-label">$BASIS PRICE</div>
+          <div class="pc-val loading" id="basisPrice">LOADING</div>
+          <div class="pc-sub">USD</div>
+        </div>
+        <div class="price-card" id="cardMcap">
+          <div class="pc-label">MARKET CAP</div>
+          <div class="pc-val loading" id="basisMcap">LOADING</div>
+          <div class="pc-sub">USD</div>
+        </div>
+      </div>
+
+      <div class="ticker-foot">
+        <div class="last-up" id="lastUpdate">Last update: —</div>
+        <button type="button" class="btn" id="refreshBtn">[ REFRESH ]</button>
       </div>
     </section>
 

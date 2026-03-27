@@ -1,0 +1,90 @@
+/* ─── Live Prices Section ────────────────────────────────────────────────── */
+
+/* Status LIVE pulse */
+.mstatus.live {
+  color: var(--g);
+  animation: blinkSlow 2.4s ease-in-out infinite;
+}
+
+@keyframes blinkSlow {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.35; }
+}
+
+/* Price card grid */
+.price-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+@media (min-width: 560px) {
+  .price-grid { grid-template-columns: 1fr 1fr 1fr; }
+}
+
+/* Individual price card */
+.price-card {
+  background: var(--input-bg);
+  border: 1px dashed var(--border);
+  border-radius: var(--r-sm);
+  padding: 14px 12px;
+  text-align: center;
+  transition: border-color 0.22s, box-shadow 0.22s;
+}
+.price-card.lit {
+  border-color: var(--border-hi);
+  box-shadow: 0 0 12px rgba(120,177,90,0.08);
+}
+
+.pc-label {
+  font-size: 0.68rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+}
+
+.pc-val {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #fff;
+  text-shadow: 0 0 10px rgba(120,177,90,0.35);
+  line-height: 1.3;
+}
+.pc-val.loading {
+  color: var(--g25);
+  font-size: 0.80rem;
+  animation: blinkSlow 1.6s ease-in-out infinite;
+}
+.pc-val.err {
+  color: var(--neg);
+  font-size: 0.78rem;
+}
+
+.pc-sub {
+  font-size: 0.70rem;
+  color: var(--text-dim);
+  margin-top: 5px;
+  min-height: 14px;
+}
+
+/* Footer row */
+.ticker-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.last-up {
+  font-size: 0.70rem;
+  color: var(--text-dim);
+  letter-spacing: 0.3px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .mstatus.live, .pc-val.loading { animation: none !important; }
+  .price-card { transition: none !important; }
+}
