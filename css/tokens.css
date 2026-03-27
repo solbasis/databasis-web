@@ -1,0 +1,94 @@
+/* ─── Design Tokens ─────────────────────────────────────────────────────── */
+:root {
+  /* Brand green */
+  --g:    #78b15a;
+  --g90:  rgba(120, 177, 90, .92);
+  --g70:  rgba(120, 177, 90, .70);
+  --g55:  rgba(120, 177, 90, .55);
+  --g40:  rgba(120, 177, 90, .40);
+  --g25:  rgba(120, 177, 90, .25);
+  --g15:  rgba(120, 177, 90, .15);
+  --g10:  rgba(120, 177, 90, .10);
+  --g06:  rgba(120, 177, 90, .06);
+
+  /* Dark theme backgrounds */
+  --bg:      #000;
+  --bg2:     #060d04;
+  --bg3:     #0a1408;
+  --surface: rgba(20, 35, 18, .55);
+
+  /* Borders */
+  --border:     rgba(120, 177, 90, .18);
+  --border-hi:  rgba(120, 177, 90, .30);
+  --border-act: rgba(120, 177, 90, .50);
+
+  /* Text */
+  --text:      rgba(120, 177, 90, .92);
+  --text-dim:  rgba(120, 177, 90, .60);
+  --text-soft: rgba(120, 177, 90, .82);
+  --text-mute: rgba(120, 177, 90, .30);
+
+  /* Semantic */
+  --pos:  #78b15a;
+  --neg:  #dc5a46;
+  --warn: #c8a832;
+
+  /* Effects */
+  --glow:    0 0 6px rgba(120, 177, 90, .20);
+  --glow-lg: 0 0 18px rgba(120, 177, 90, .55);
+  --shadow:  inset 0 0 14px rgba(120, 177, 90, .04);
+
+  /* Misc */
+  --r:    14px;
+  --r-sm: 10px;
+  --mono: 'IBM Plex Mono', monospace;
+
+  --input-bg:    rgba(0,0,0,.28);
+  --scanline:    rgba(120, 177, 90, .018);
+  --head-bg:     rgba(120, 177, 90, .09);
+  --head-border: rgba(120, 177, 90, .12);
+
+  color-scheme: dark;
+}
+
+/* ─── Light theme ───────────────────────────────────────────────────────── */
+[data-theme="light"] {
+  --g:    #3a7a28;
+  --g90:  rgba(58, 122, 40, .92);
+  --g70:  rgba(58, 122, 40, .70);
+  --g55:  rgba(58, 122, 40, .55);
+  --g40:  rgba(58, 122, 40, .40);
+  --g25:  rgba(58, 122, 40, .25);
+  --g15:  rgba(58, 122, 40, .15);
+  --g10:  rgba(58, 122, 40, .10);
+  --g06:  rgba(58, 122, 40, .06);
+
+  --bg:      #e8e8e0;
+  --bg2:     #deded6;
+  --bg3:     #d4d4cc;
+  --surface: rgba(200, 210, 195, .55);
+
+  --border:     rgba(58, 122, 40, .20);
+  --border-hi:  rgba(58, 122, 40, .35);
+  --border-act: rgba(58, 122, 40, .55);
+
+  --text:      rgba(20, 40, 15, .88);
+  --text-dim:  rgba(20, 40, 15, .60);
+  --text-soft: rgba(20, 40, 15, .75);
+  --text-mute: rgba(20, 40, 15, .35);
+
+  --pos:  #3a7a28;
+  --neg:  #c04030;
+  --warn: #8a7020;
+
+  --glow:    0 0 6px rgba(58, 122, 40, .10);
+  --glow-lg: 0 0 18px rgba(58, 122, 40, .25);
+  --shadow:  inset 0 0 14px rgba(58, 122, 40, .03);
+
+  --input-bg:    rgba(255,255,255,.5);
+  --scanline:    rgba(58, 122, 40, .025);
+  --head-bg:     rgba(58, 122, 40, .07);
+  --head-border: rgba(58, 122, 40, .12);
+
+  color-scheme: light;
+}
