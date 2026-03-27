@@ -25,6 +25,7 @@
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/hero.css">
   <link rel="stylesheet" href="css/prices.css">
+  <link rel="stylesheet" href="css/token.css">
 </head>
 <body>
 
@@ -200,6 +201,65 @@
         <button type="button" class="btn" id="refreshBtn">[ REFRESH ]</button>
       </div>
     </section>
+
+  </main>
+
+    <div class="sep"><span>TOKEN</span></div>
+
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <!-- SECTION 4 — TOKEN                                            -->
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <div class="g2">
+
+      <!-- Tokenomics -->
+      <section class="panel" aria-label="Tokenomics">
+        <div class="mbar">
+          <div class="mbar-l">
+            <div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+            <div class="mlabel">BASIS://TOKENOMICS</div>
+          </div>
+          <div class="mstatus">STATS</div>
+        </div>
+        <h2>&gt; TOKENOMICS</h2>
+        <div class="kv" role="list">
+          <div class="kv-row" role="listitem"><span class="kv-k">SUPPLY</span>    <span class="kv-v">1,000,000,000</span></div>
+          <div class="kv-row" role="listitem"><span class="kv-k">UTILITY</span>   <span class="kv-v">Ecosystem &amp; Governance</span></div>
+          <div class="kv-row" role="listitem"><span class="kv-k">LIQUIDITY</span> <span class="kv-v">100% Burnt</span></div>
+          <div class="kv-row" role="listitem"><span class="kv-k">NETWORK</span>   <span class="kv-v">Solana</span></div>
+        </div>
+      </section>
+
+      <!-- Contract -->
+      <section class="panel" aria-label="Contract details">
+        <div class="mbar">
+          <div class="mbar-l">
+            <div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+            <div class="mlabel">BASIS://CONTRACT</div>
+          </div>
+          <div class="mstatus">VERIFY</div>
+        </div>
+        <h2>&gt; CONTRACT DETAILS</h2>
+        <div class="addr-row">
+          <button type="button" class="addr-box" id="addrBox" title="Click to copy" aria-label="Copy contract address"></button>
+          <button type="button" class="copy-btn" id="copyBtn" aria-label="Copy address">
+            <svg class="copy-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="9" y="9" width="12" height="12" rx="2" ry="2"></rect>
+              <rect x="3" y="3" width="12" height="12" rx="2" ry="2" opacity="0.7"></rect>
+            </svg>
+          </button>
+        </div>
+        <div class="toast" id="toast" role="status" aria-live="polite"></div>
+        <div class="btn-grid" role="group" aria-label="Token explorers">
+          <a id="dexLink"     href="#" target="_blank" rel="noopener noreferrer" class="btn">[ DEXSCREENER ]</a>
+          <a id="solscanLink" href="#" target="_blank" rel="noopener noreferrer" class="btn">[ SOLSCAN ]</a>
+          <a id="pumpLink"    href="#" target="_blank" rel="noopener noreferrer" class="btn">[ PUMP.FUN ]</a>
+          <a id="orbLink"     href="#" target="_blank" rel="noopener noreferrer" class="btn">[ ORB ]</a>
+          <a href="https://moontok.io/coins/basis" target="_blank" rel="noopener noreferrer" class="btn">[ MOONTOK ]</a>
+          <a id="mobyLink"    href="#" target="_blank" rel="noopener noreferrer" class="btn">[ MOBYSCREENER ]</a>
+        </div>
+      </section>
+
+    </div><!-- /g2 -->
 
   </main>
 

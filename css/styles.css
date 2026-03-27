@@ -140,6 +140,60 @@ body {
   flex-wrap: wrap;
 }
 
+.btn:active       { transform: translateY(0) scale(0.985); }
+.btn:focus-visible { outline: 2px solid var(--g); outline-offset: 3px; }
+
+/* Button grid (auto-fit columns) */
+.btn-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+@media (max-width: 767px) { .btn-grid { grid-template-columns: 1fr; } }
+
+/* ─── Two-column layout ──────────────────────────────────────────────────── */
+.g2 { display: flex; flex-direction: column; gap: 20px; }
+@media (min-width: 768px) {
+  .g2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+    gap: 22px;
+  }
+}
+
+/* ─── Key-value table ────────────────────────────────────────────────────── */
+.kv {
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  overflow: hidden;
+  background: rgba(0,0,0,0.25);
+}
+.kv-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 11px 14px;
+  border-top: 1px dashed var(--border);
+  font-size: 0.84rem;
+}
+.kv-row:first-child { border-top: 0; }
+.kv-k {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+.kv-v {
+  color: #fff;
+  font-weight: 600;
+  text-align: right;
+  word-break: break-all;
+  text-shadow: 0 0 8px rgba(120,177,90,0.28);
+}
+
 /* ─── Page wrapper ───────────────────────────────────────────────────────── */
 .page {
   position: relative;

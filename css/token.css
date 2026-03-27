@@ -1,0 +1,93 @@
+/* ─── Token Section ──────────────────────────────────────────────────────── */
+
+/* Address display row */
+.addr-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+@media (min-width: 600px) {
+  .addr-row { flex-direction: row; align-items: center; }
+}
+
+.addr-box {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 12px 14px;
+  background: rgba(0,0,0,0.35);
+  border: 1px dashed var(--border-hi);
+  border-radius: var(--r-sm);
+  font-size: 0.80rem;
+  font-family: var(--mono);
+  color: inherit;
+  word-break: break-all;
+  cursor: pointer;
+  text-align: left;
+  min-height: 42px;
+  appearance: none;
+  transition: border-color 0.18s, background 0.18s;
+}
+.addr-box:hover  { border-color: var(--border-act); }
+.addr-box.copied {
+  border-color: var(--g);
+  background: var(--g10);
+  color: #fff;
+  text-shadow: 0 0 10px rgba(120,177,90,0.7);
+}
+
+/* Copy button */
+.copy-btn {
+  flex-shrink: 0;
+  width: 42px; height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--g40);
+  border-radius: var(--r-sm);
+  background: transparent;
+  cursor: pointer;
+  box-shadow: var(--glow);
+  transition: background 0.16s, border-color 0.16s, box-shadow 0.16s;
+  -webkit-tap-highlight-color: transparent;
+}
+.copy-btn:hover {
+  background: var(--g10);
+  border-color: var(--g);
+  box-shadow: var(--glow-lg);
+}
+.copy-btn:focus-visible { outline: 2px solid var(--g); outline-offset: 3px; }
+
+.copy-icon { width: 16px; height: 16px; pointer-events: none; }
+.copy-icon rect {
+  fill: none;
+  stroke: var(--g90);
+  stroke-width: 1.8;
+}
+.copy-btn:hover .copy-icon rect { stroke: var(--g); }
+
+/* Toast notification */
+.toast {
+  padding: 9px 13px;
+  background: var(--g10);
+  color: var(--g);
+  border: 1px solid var(--g40);
+  border-radius: var(--r-sm);
+  font-size: 0.80rem;
+  text-align: center;
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.20s, transform 0.20s;
+  margin-top: 8px;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .addr-box, .copy-btn, .toast { transition: none !important; }
+}
