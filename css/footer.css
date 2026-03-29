@@ -136,6 +136,43 @@ footer::before {
   font-weight: 500;
 }
 
+/* ─── Social links ───────────────────────────────────────────────────────── */
+.footer-social {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  max-width: 900px;
+  margin: 0 auto 16px;
+}
+
+.footer-social-link {
+  font-size: 0.65rem;
+  letter-spacing: 2px;
+  color: rgba(120, 177, 90, .40);
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 0.2s, text-shadow 0.2s;
+}
+
+.footer-social-link:hover {
+  color: var(--g-bright);
+  text-shadow: 0 0 10px rgba(120, 177, 90, .55);
+}
+
+.fsl-bracket { color: rgba(120, 177, 90, .22); }
+
+.fsl-sep {
+  font-size: 0.55rem;
+  color: rgba(120, 177, 90, .18);
+  letter-spacing: 1px;
+}
+
+@media (max-width: 640px) {
+  .footer-social { gap: 10px; flex-wrap: wrap; }
+  .fsl-sep       { display: none; }
+}
+
 /* ─── Divider ────────────────────────────────────────────────────────────── */
 .footer-divider {
   max-width: 900px;
