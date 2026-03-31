@@ -1,0 +1,493 @@
+/* ============================================================
+   widgets.css — Dashboard widget styles for Databasis terminal
+   ============================================================ */
+
+/* ── Metrics row ──────────────────────────────────────────── */
+.metrics-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+@media (max-width: 1280px) {
+  .metrics-row {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 780px) {
+  .metrics-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ── Metric card ──────────────────────────────────────────── */
+.metric-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 14px 16px;
+  position: relative;
+  overflow: hidden;
+  cursor: default;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.metric-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: var(--scanline);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}
+
+.metric-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.metric-card:hover {
+  border-color: var(--border-hi, rgba(120,177,90,.35));
+}
+
+.metric-card.featured {
+  border-color: rgba(120,177,90,.25);
+  background: linear-gradient(135deg, rgba(120,177,90,.07), rgba(120,177,90,.03));
+}
+
+.mc-label {
+  font-size: 0.63rem;
+  letter-spacing: 2px;
+  color: var(--text-mute);
+  text-transform: uppercase;
+  margin-bottom: 7px;
+  font-family: var(--mono);
+  display: block;
+}
+
+.mc-val {
+  font-size: 1.22rem;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1;
+  min-height: 1.25em;
+  font-family: var(--mono);
+}
+
+.mc-val.loading {
+  color: var(--text-mute);
+  animation: skeleton-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 0.4; }
+  50%       { opacity: 0.9; }
+}
+
+.mc-change {
+  font-size: 0.70rem;
+  margin-top: 5px;
+  font-family: var(--mono);
+}
+
+.mc-change.pos { color: var(--pos); }
+.mc-change.neg { color: var(--neg); }
+
+.mc-sub {
+  font-size: 0.63rem;
+  color: var(--text-mute);
+  margin-top: 4px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-family: var(--mono);
+}
+
+/* ── Main dashboard grid ──────────────────────────────────── */
+.dash-grid-main {
+  display: grid;
+  grid-template-columns: 1fr 256px;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+@media (max-width: 1100px) {
+  .dash-grid-main {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Chart panel controls ─────────────────────────────────── */
+.chart-panel .mbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.mbar-r {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.chart-tabs {
+  display: flex;
+  gap: 2px;
+}
+
+.chart-tab {
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  color: var(--text-mute);
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  padding: 3px 7px;
+  cursor: pointer;
+  transition: color 0.14s ease, background 0.14s ease, border-color 0.14s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.chart-tab:hover {
+  color: var(--text-dim);
+  background: var(--g06);
+}
+
+.chart-tab.active {
+  color: var(--g);
+  background: var(--g12, rgba(120,177,90,.12));
+  border-color: rgba(120,177,90,.25);
+}
+
+#priceChart {
+  width: 100%;
+  display: block;
+  margin-top: 6px;
+  border-radius: 4px;
+}
+
+/* ── Token quick panel ────────────────────────────────────── */
+.token-quick .tok-symbol {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--g);
+  letter-spacing: 3px;
+  margin-bottom: 14px;
+  display: block;
+  font-family: var(--mono);
+}
+
+.addr-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 14px;
+}
+
+.addr-box {
+  font-family: var(--mono);
+  font-size: 0.63rem;
+  color: var(--text-dim);
+  background: var(--input-bg, rgba(0,0,0,.35));
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 7px 10px;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+  transition: border-color 0.14s ease;
+}
+
+.addr-box:hover,
+.addr-box.copied {
+  border-color: rgba(120,177,90,.40);
+}
+
+.copy-btn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 6px 7px;
+  cursor: pointer;
+  color: var(--text-dim);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.14s ease, border-color 0.14s ease;
+}
+
+.copy-btn:hover {
+  color: var(--g);
+  border-color: rgba(120,177,90,.40);
+}
+
+.copy-icon {
+  width: 13px;
+  height: 13px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.toast {
+  font-size: 0.68rem;
+  color: var(--pos);
+  height: 16px;
+  margin-top: 5px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  font-family: var(--mono);
+}
+
+.toast.show {
+  opacity: 1;
+}
+
+.explorer-links {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px;
+  margin-top: 12px;
+}
+
+.explorer-links .btn {
+  font-size: 0.64rem;
+  padding: 7px 6px;
+  justify-content: center;
+}
+
+/* ── Bottom dashboard grid ────────────────────────────────── */
+.dash-grid-bottom {
+  display: grid;
+  grid-template-columns: 1fr 268px;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+@media (max-width: 1100px) {
+  .dash-grid-bottom {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Data table ───────────────────────────────────────────── */
+.table-wrap {
+  overflow-x: auto;
+  margin-top: 6px;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--mono);
+}
+
+.data-table th {
+  text-align: left;
+  padding: 7px 12px;
+  font-size: 0.63rem;
+  letter-spacing: 1.8px;
+  color: var(--text-mute);
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+  user-select: none;
+  font-weight: 500;
+}
+
+.data-table td {
+  padding: 8px 12px;
+  border-bottom: 1px dashed var(--border);
+  color: var(--text-soft, var(--text));
+  white-space: nowrap;
+  font-size: 0.76rem;
+}
+
+.data-table tr:last-child td {
+  border-bottom: none;
+}
+
+.data-table tr:hover td {
+  background: rgba(120,177,90,.06);
+}
+
+.type-buy {
+  color: var(--pos);
+  font-weight: 600;
+}
+
+.type-sell {
+  color: var(--neg);
+  font-weight: 600;
+}
+
+.tx-link {
+  color: var(--text-dim);
+  text-decoration: none;
+}
+
+.tx-link:hover {
+  color: var(--g);
+  text-decoration: underline;
+}
+
+.tx-empty {
+  text-align: center;
+  color: var(--text-mute);
+  padding: 24px;
+  font-size: 0.76rem;
+}
+
+/* ── Ecosystem stack (sidebar column) ─────────────────────── */
+.eco-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.eco-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.eco-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 9px 11px;
+  background: rgba(0,0,0,.2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.eco-stat-val {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+  font-family: var(--mono);
+}
+
+.eco-stat-label {
+  font-size: 0.60rem;
+  letter-spacing: 1.5px;
+  color: var(--text-mute);
+  text-transform: uppercase;
+  font-family: var(--mono);
+}
+
+/* ── Tool links ───────────────────────────────────────────── */
+.tool-links {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.tool-link {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 11px;
+  background: rgba(0,0,0,.18);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-dim);
+  font-size: 0.74rem;
+  letter-spacing: 0.7px;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-family: var(--mono);
+  transition: border-color 0.14s ease, color 0.14s ease, background 0.14s ease;
+}
+
+.tool-link:hover {
+  border-color: rgba(120,177,90,.35);
+  color: var(--g);
+  background: var(--g06);
+}
+
+.tl-icon {
+  color: rgba(120,177,90,.40);
+  font-size: 0.72rem;
+  flex-shrink: 0;
+}
+
+/* ── Token / eco grids ────────────────────────────────────── */
+.token-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.eco-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+/* ── Featured button ──────────────────────────────────────── */
+.btn-featured {
+  background: rgba(120,177,90,.15) !important;
+  border-color: rgba(120,177,90,.55) !important;
+  color: var(--g) !important;
+  width: 100%;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+.btn-featured:hover {
+  background: rgba(120,177,90,.25) !important;
+}
+
+/* ── Note / callout ───────────────────────────────────────── */
+.note {
+  font-size: 0.82rem;
+  color: var(--text-soft, var(--text));
+  background: rgba(200,168,50,.06);
+  border: 1px solid rgba(200,168,50,.2);
+  border-radius: var(--r-sm);
+  padding: 14px 16px;
+  line-height: 1.8;
+}
+
+.note strong.addr {
+  display: block;
+  word-break: break-all;
+  color: var(--g);
+  margin: 6px 0 8px;
+  font-size: 0.75rem;
+  font-family: var(--mono);
+}
+
+.sub-note {
+  font-size: 0.78rem;
+  color: var(--text-mute);
+  margin-top: 10px;
+  line-height: 1.7;
+}
+
+/* ── Reduced motion ───────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .tab-pane.active {
+    animation: none;
+  }
+
+  .mc-val.loading {
+    animation: none;
+  }
+}

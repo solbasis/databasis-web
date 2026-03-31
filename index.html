@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="BASIS — The data layer of Solana.">
-  <title>BASIS</title>
+  <meta name="description" content="BASIS Terminal — Real-time analytics and on-chain tools for Solana DeFi.">
+  <title>BASIS Terminal</title>
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="apple-touch-icon" href="favicon.ico">
   <meta http-equiv="Content-Security-Policy" content="
@@ -16,6 +16,7 @@
       https://api.dexscreener.com
       https://lite-api.jup.ag
       https://mainnet.helius-rpc.com
+      https://api-mainnet.helius-rpc.com
       https://*.helius-rpc.com;
     upgrade-insecure-requests;
   ">
@@ -25,410 +26,630 @@
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/styles.css">
-  <link rel="stylesheet" href="css/hero.css">
-  <link rel="stylesheet" href="css/prices.css">
-  <link rel="stylesheet" href="css/token.css">
-  <link rel="stylesheet" href="css/nft.css">
-  <link rel="stylesheet" href="css/security.css">
-  <link rel="stylesheet" href="css/community.css">
-  <link rel="stylesheet" href="css/footer.css">
+  <link rel="stylesheet" href="css/terminal.css">
+  <link rel="stylesheet" href="css/widgets.css">
 </head>
 <body>
 
-  <!-- ── Background effects ── -->
-  <canvas id="grid-canvas"></canvas>
-  <div class="screen-glow"></div>
-  <div class="crt-flicker"></div>
-  <div class="crt-overlay"></div>
-  <div class="noise"></div>
+  <!-- ── Ambient effects ── -->
+  <div class="screen-glow" aria-hidden="true"></div>
+  <div class="crt-overlay"  aria-hidden="true"></div>
+  <div class="noise"        aria-hidden="true"></div>
 
-  <!-- ══════════════════════════════════════════════════════════════ -->
-  <!-- SECTION 1 — HERO                                             -->
-  <!-- ══════════════════════════════════════════════════════════════ -->
-  <header class="hero">
+  <!-- ── Mobile sidebar backdrop ── -->
+  <div class="sidebar-backdrop" id="sidebarBackdrop" aria-hidden="true"></div>
 
-    <!-- Pixel logo -->
-    <div class="logo-wrap" aria-label="BASIS">
-      <svg class="pixel-logo" viewBox="0 0 586 110" role="img" aria-label="BASIS">
-        <g transform="translate(-40,0)">
-          <!-- B -->
-          <rect x="40"  y="10" width="10" height="10" rx="1"/><rect x="54"  y="10" width="10" height="10" rx="1"/><rect x="68"  y="10" width="10" height="10" rx="1"/><rect x="82"  y="10" width="10" height="10" rx="1"/>
-          <rect x="40"  y="24" width="10" height="10" rx="1"/><rect x="96"  y="24" width="10" height="10" rx="1"/>
-          <rect x="40"  y="38" width="10" height="10" rx="1"/><rect x="96"  y="38" width="10" height="10" rx="1"/>
-          <rect x="40"  y="52" width="10" height="10" rx="1"/><rect x="54"  y="52" width="10" height="10" rx="1"/><rect x="68"  y="52" width="10" height="10" rx="1"/><rect x="82"  y="52" width="10" height="10" rx="1"/>
-          <rect x="40"  y="66" width="10" height="10" rx="1"/><rect x="96"  y="66" width="10" height="10" rx="1"/>
-          <rect x="40"  y="80" width="10" height="10" rx="1"/><rect x="96"  y="80" width="10" height="10" rx="1"/>
-          <rect x="40"  y="94" width="10" height="10" rx="1"/><rect x="54"  y="94" width="10" height="10" rx="1"/><rect x="68"  y="94" width="10" height="10" rx="1"/><rect x="82"  y="94" width="10" height="10" rx="1"/>
-          <!-- A -->
-          <rect x="174" y="10" width="10" height="10" rx="1"/><rect x="188" y="10" width="10" height="10" rx="1"/><rect x="202" y="10" width="10" height="10" rx="1"/>
-          <rect x="160" y="24" width="10" height="10" rx="1"/><rect x="216" y="24" width="10" height="10" rx="1"/>
-          <rect x="160" y="38" width="10" height="10" rx="1"/><rect x="216" y="38" width="10" height="10" rx="1"/>
-          <rect x="160" y="52" width="10" height="10" rx="1"/><rect x="174" y="52" width="10" height="10" rx="1"/><rect x="188" y="52" width="10" height="10" rx="1"/><rect x="202" y="52" width="10" height="10" rx="1"/><rect x="216" y="52" width="10" height="10" rx="1"/>
-          <rect x="160" y="66" width="10" height="10" rx="1"/><rect x="216" y="66" width="10" height="10" rx="1"/>
-          <rect x="160" y="80" width="10" height="10" rx="1"/><rect x="216" y="80" width="10" height="10" rx="1"/>
-          <rect x="160" y="94" width="10" height="10" rx="1"/><rect x="216" y="94" width="10" height="10" rx="1"/>
-          <!-- S -->
-          <rect x="294" y="10" width="10" height="10" rx="1"/><rect x="308" y="10" width="10" height="10" rx="1"/><rect x="322" y="10" width="10" height="10" rx="1"/><rect x="336" y="10" width="10" height="10" rx="1"/>
-          <rect x="280" y="24" width="10" height="10" rx="1"/>
-          <rect x="280" y="38" width="10" height="10" rx="1"/>
-          <rect x="294" y="52" width="10" height="10" rx="1"/><rect x="308" y="52" width="10" height="10" rx="1"/><rect x="322" y="52" width="10" height="10" rx="1"/>
-          <rect x="336" y="66" width="10" height="10" rx="1"/>
-          <rect x="336" y="80" width="10" height="10" rx="1"/>
-          <rect x="280" y="94" width="10" height="10" rx="1"/><rect x="294" y="94" width="10" height="10" rx="1"/><rect x="308" y="94" width="10" height="10" rx="1"/><rect x="322" y="94" width="10" height="10" rx="1"/>
-          <!-- I -->
-          <rect x="400" y="10" width="10" height="10" rx="1"/><rect x="414" y="10" width="10" height="10" rx="1"/><rect x="428" y="10" width="10" height="10" rx="1"/>
-          <rect x="414" y="24" width="10" height="10" rx="1"/><rect x="414" y="38" width="10" height="10" rx="1"/><rect x="414" y="52" width="10" height="10" rx="1"/><rect x="414" y="66" width="10" height="10" rx="1"/><rect x="414" y="80" width="10" height="10" rx="1"/>
-          <rect x="400" y="94" width="10" height="10" rx="1"/><rect x="414" y="94" width="10" height="10" rx="1"/><rect x="428" y="94" width="10" height="10" rx="1"/>
-          <!-- S -->
-          <rect x="514" y="10" width="10" height="10" rx="1"/><rect x="528" y="10" width="10" height="10" rx="1"/><rect x="542" y="10" width="10" height="10" rx="1"/><rect x="556" y="10" width="10" height="10" rx="1"/>
-          <rect x="500" y="24" width="10" height="10" rx="1"/>
-          <rect x="500" y="38" width="10" height="10" rx="1"/>
-          <rect x="514" y="52" width="10" height="10" rx="1"/><rect x="528" y="52" width="10" height="10" rx="1"/><rect x="542" y="52" width="10" height="10" rx="1"/>
-          <rect x="556" y="66" width="10" height="10" rx="1"/>
-          <rect x="556" y="80" width="10" height="10" rx="1"/>
-          <rect x="500" y="94" width="10" height="10" rx="1"/><rect x="514" y="94" width="10" height="10" rx="1"/><rect x="528" y="94" width="10" height="10" rx="1"/><rect x="542" y="94" width="10" height="10" rx="1"/>
-        </g>
-      </svg>
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <!-- SIDEBAR                                                              -->
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <aside class="sidebar" id="sidebar" aria-label="Main navigation">
+
+    <a href="/" class="sidebar-logo" aria-label="BASIS Terminal home">
+      <div>
+        <div class="sl-mark">BASIS</div>
+        <div class="sl-tag">TERMINAL</div>
+      </div>
+    </a>
+
+    <nav class="sidebar-nav" aria-label="Terminal navigation">
+
+      <div class="nav-section">
+        <div class="nav-label">TERMINAL</div>
+        <button class="nav-item active" data-tab="dashboard" aria-current="page">
+          <span class="nav-icon" aria-hidden="true">▣</span> DASHBOARD
+        </button>
+        <button class="nav-item" data-tab="token">
+          <span class="nav-icon" aria-hidden="true">◈</span> $BASIS TOKEN
+        </button>
+        <button class="nav-item" data-tab="ecosystem">
+          <span class="nav-icon" aria-hidden="true">◆</span> ECOSYSTEM
+        </button>
+      </div>
+
+      <div class="nav-divider"></div>
+
+      <div class="nav-section">
+        <div class="nav-label">ON-CHAIN TOOLS</div>
+        <a href="map.html" class="nav-item ext">
+          <span class="nav-icon" aria-hidden="true">◉</span> HOLDER MAP
+        </a>
+        <a href="tools.html#balance" class="nav-item ext">
+          <span class="nav-icon" aria-hidden="true">◈</span> BALANCE CHECK
+        </a>
+        <a href="tools.html#nft" class="nav-item ext">
+          <span class="nav-icon" aria-hidden="true">◆</span> NFT SCAN
+        </a>
+        <a href="tools.html#pnl" class="nav-item ext">
+          <span class="nav-icon" aria-hidden="true">▲</span> PNL MONITOR
+        </a>
+      </div>
+
+      <div class="nav-divider"></div>
+
+      <div class="nav-section">
+        <div class="nav-label">ECOSYSTEM</div>
+        <a href="https://terminal.databasis.info/" target="_blank" rel="noopener noreferrer" class="nav-item ext">
+          <span class="nav-icon" aria-hidden="true">▶</span> OPEN TERMINAL
+        </a>
+        <a href="https://nft.databasis.info/" target="_blank" rel="noopener noreferrer" class="nav-item ext">
+          <span class="nav-icon" aria-hidden="true">◆</span> NFT BUILDER
+        </a>
+        <a href="https://game.databasis.info/" target="_blank" rel="noopener noreferrer" class="nav-item ext">
+          <span class="nav-icon" aria-hidden="true">▶</span> TOWER DEFENSE
+        </a>
+      </div>
+
+    </nav>
+
+    <div class="sidebar-foot">
+      <div class="net-status">
+        <span class="dot-live" aria-hidden="true"></span>
+        SOLANA MAINNET
+      </div>
     </div>
 
-    <!-- Ghost reflection -->
-    <div class="logo-reflection" aria-hidden="true">
-      <svg class="pixel-logo" viewBox="0 0 586 110">
-        <g transform="translate(-40,0)">
-          <rect x="40"  y="10" width="10" height="10" rx="1"/><rect x="54"  y="10" width="10" height="10" rx="1"/><rect x="68"  y="10" width="10" height="10" rx="1"/><rect x="82"  y="10" width="10" height="10" rx="1"/>
-          <rect x="40"  y="24" width="10" height="10" rx="1"/><rect x="96"  y="24" width="10" height="10" rx="1"/>
-          <rect x="40"  y="38" width="10" height="10" rx="1"/><rect x="96"  y="38" width="10" height="10" rx="1"/>
-          <rect x="40"  y="52" width="10" height="10" rx="1"/><rect x="54"  y="52" width="10" height="10" rx="1"/><rect x="68"  y="52" width="10" height="10" rx="1"/><rect x="82"  y="52" width="10" height="10" rx="1"/>
-          <rect x="174" y="10" width="10" height="10" rx="1"/><rect x="188" y="10" width="10" height="10" rx="1"/><rect x="202" y="10" width="10" height="10" rx="1"/>
-          <rect x="160" y="24" width="10" height="10" rx="1"/><rect x="216" y="24" width="10" height="10" rx="1"/>
-          <rect x="160" y="38" width="10" height="10" rx="1"/><rect x="216" y="38" width="10" height="10" rx="1"/>
-          <rect x="160" y="52" width="10" height="10" rx="1"/><rect x="174" y="52" width="10" height="10" rx="1"/><rect x="188" y="52" width="10" height="10" rx="1"/><rect x="202" y="52" width="10" height="10" rx="1"/><rect x="216" y="52" width="10" height="10" rx="1"/>
-          <rect x="294" y="10" width="10" height="10" rx="1"/><rect x="308" y="10" width="10" height="10" rx="1"/><rect x="322" y="10" width="10" height="10" rx="1"/><rect x="336" y="10" width="10" height="10" rx="1"/>
-          <rect x="280" y="24" width="10" height="10" rx="1"/>
-          <rect x="294" y="52" width="10" height="10" rx="1"/><rect x="308" y="52" width="10" height="10" rx="1"/><rect x="322" y="52" width="10" height="10" rx="1"/>
-          <rect x="400" y="10" width="10" height="10" rx="1"/><rect x="414" y="10" width="10" height="10" rx="1"/><rect x="428" y="10" width="10" height="10" rx="1"/>
-          <rect x="414" y="24" width="10" height="10" rx="1"/><rect x="414" y="38" width="10" height="10" rx="1"/><rect x="414" y="52" width="10" height="10" rx="1"/>
-          <rect x="514" y="10" width="10" height="10" rx="1"/><rect x="528" y="10" width="10" height="10" rx="1"/><rect x="542" y="10" width="10" height="10" rx="1"/><rect x="556" y="10" width="10" height="10" rx="1"/>
-          <rect x="500" y="24" width="10" height="10" rx="1"/>
-          <rect x="514" y="52" width="10" height="10" rx="1"/><rect x="528" y="52" width="10" height="10" rx="1"/><rect x="542" y="52" width="10" height="10" rx="1"/>
-        </g>
-      </svg>
+  </aside>
+
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <!-- TOPBAR                                                               -->
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <header class="topbar" aria-label="Terminal header">
+
+    <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle navigation" aria-expanded="false">
+      ≡
+    </button>
+
+    <!-- Live price ticker -->
+    <div class="ticker-strip" role="status" aria-label="Live prices" aria-live="polite">
+      <div class="ticker-item">
+        <span class="t-label">SOL</span>
+        <span class="t-val loading" id="tb-sol">—</span>
+      </div>
+      <span class="ticker-sep" aria-hidden="true">//</span>
+      <div class="ticker-item">
+        <span class="t-label">$BASIS</span>
+        <span class="t-val loading" id="tb-basis">—</span>
+      </div>
+      <span class="ticker-sep" aria-hidden="true">//</span>
+      <div class="ticker-item">
+        <span class="t-label">MCAP</span>
+        <span class="t-val" id="tb-mcap">—</span>
+      </div>
+      <span class="ticker-sep" aria-hidden="true">//</span>
+      <div class="ticker-item" id="tb-change-wrap">
+        <span class="t-label">24H</span>
+        <span class="t-val" id="tb-change">—</span>
+      </div>
     </div>
 
-    <!-- Typing subtitle -->
-    <div class="subtitle-row">
-      <span class="prompt-symbol">root@basis:~$</span>
-      <span class="typed-text" id="typed"></span>
-      <span class="cursor-block" aria-hidden="true"></span>
+    <!-- Global search -->
+    <div class="search-wrap" role="search">
+      <input
+        type="text"
+        class="search-input"
+        id="globalSearch"
+        placeholder="Search wallet or token..."
+        autocomplete="off"
+        spellcheck="false"
+        aria-label="Search wallet address or token"
+      >
+      <kbd class="search-kbd" aria-label="Keyboard shortcut Control K">⌘K</kbd>
     </div>
 
-    <!-- Status bar -->
-    <div class="status-bar">
-      <span><span class="status-dot"></span> NETWORK ONLINE</span>
-      <span><span class="status-dot amber"></span> SYNCING BLOCKS</span>
-      <span><span class="status-dot"></span> $BASIS ACTIVE</span>
+    <!-- Right actions -->
+    <div class="topbar-right">
+      <a href="https://terminal.databasis.info/" target="_blank" rel="noopener noreferrer" class="btn btn-sm">
+        [ TERMINAL ]
+      </a>
+      <div class="net-badge" aria-label="Network: Solana Mainnet, online">
+        <span class="dot-live" aria-hidden="true"></span>
+        MAINNET
+      </div>
     </div>
+
   </header>
 
-  <!-- ══════════════════════════════════════════════════════════════ -->
-  <!-- SECTION 2 — OVERVIEW                                         -->
-  <!-- ══════════════════════════════════════════════════════════════ -->
-  <main class="page">
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <!-- MAIN CONTENT                                                         -->
+  <!-- ══════════════════════════════════════════════════════════════════════ -->
+  <main class="main-content" id="mainContent">
 
-    <div class="sep"><span>OVERVIEW</span></div>
+    <!-- ================================================================== -->
+    <!-- TAB: DASHBOARD                                                     -->
+    <!-- ================================================================== -->
+    <div class="tab-pane active" id="tab-dashboard" role="tabpanel" aria-label="Dashboard">
 
-    <section class="panel" aria-label="BASIS Terminal overview">
-      <div class="mbar">
-        <div class="mbar-l">
-          <div class="dots">
-            <span class="dot"></span>
-            <span class="dot"></span>
-            <span class="dot"></span>
+      <div class="page-header">
+        <div class="page-title">
+          <span class="prompt-sym" aria-hidden="true">$</span> DASHBOARD
+        </div>
+        <div class="page-meta">
+          <span id="dash-timestamp" aria-live="polite"></span>
+          <button class="btn btn-sm" id="dashRefresh" type="button">[ REFRESH ]</button>
+        </div>
+      </div>
+
+      <!-- ── Metric cards ── -->
+      <div class="metrics-row" role="list" aria-label="Key metrics">
+
+        <div class="metric-card" role="listitem">
+          <div class="mc-label">SOL PRICE</div>
+          <div class="mc-val loading" id="mc-sol-val" aria-live="polite">—</div>
+          <div class="mc-sub">USD</div>
+        </div>
+
+        <div class="metric-card featured" role="listitem">
+          <div class="mc-label">$BASIS PRICE</div>
+          <div class="mc-val loading" id="mc-basis-val" aria-live="polite">—</div>
+          <div class="mc-change" id="mc-basis-chg" aria-live="polite"></div>
+        </div>
+
+        <div class="metric-card" role="listitem">
+          <div class="mc-label">MARKET CAP</div>
+          <div class="mc-val loading" id="mc-mcap-val" aria-live="polite">—</div>
+          <div class="mc-sub">USD</div>
+        </div>
+
+        <div class="metric-card" role="listitem">
+          <div class="mc-label">24H VOLUME</div>
+          <div class="mc-val loading" id="mc-vol-val" aria-live="polite">—</div>
+          <div class="mc-sub">USD</div>
+        </div>
+
+        <div class="metric-card" role="listitem">
+          <div class="mc-label">LIQUIDITY</div>
+          <div class="mc-val loading" id="mc-liq-val" aria-live="polite">—</div>
+          <div class="mc-sub">USD</div>
+        </div>
+
+      </div><!-- /metrics-row -->
+
+      <!-- ── Chart + token quick info ── -->
+      <div class="dash-grid-main">
+
+        <!-- Price chart -->
+        <section class="panel chart-panel" aria-label="$BASIS price chart">
+          <div class="mbar">
+            <div class="mbar-l">
+              <div class="dots" aria-hidden="true">
+                <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+              </div>
+              <div class="mlabel">$BASIS / USD · PRICE CHART</div>
+            </div>
+            <div class="mbar-r">
+              <div class="chart-tabs" role="group" aria-label="Chart timeframe">
+                <button class="chart-tab active" data-tf="1H" type="button">1H</button>
+                <button class="chart-tab" data-tf="4H" type="button">4H</button>
+                <button class="chart-tab" data-tf="1D" type="button">1D</button>
+                <button class="chart-tab" data-tf="1W" type="button">1W</button>
+              </div>
+              <div class="mstatus live" id="ticker-status" aria-live="polite">LOADING</div>
+            </div>
           </div>
-          <div class="mlabel">BASIS://TERMINAL</div>
+          <canvas id="priceChart" height="200" aria-label="$BASIS price chart visualization" role="img"></canvas>
+        </section>
+
+        <!-- Token quick info -->
+        <section class="panel token-quick" aria-label="$BASIS token info">
+          <div class="mbar">
+            <div class="mbar-l">
+              <div class="dots" aria-hidden="true">
+                <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+              </div>
+              <div class="mlabel">TOKEN INFO</div>
+            </div>
+            <div class="mstatus">STATS</div>
+          </div>
+
+          <span class="tok-symbol" aria-label="$BASIS token">$BASIS</span>
+
+          <div class="kv" role="list" aria-label="Token statistics">
+            <div class="kv-row" role="listitem"><span class="kv-k">SUPPLY</span><span class="kv-v">1,000,000,000</span></div>
+            <div class="kv-row" role="listitem"><span class="kv-k">NETWORK</span><span class="kv-v">SOLANA</span></div>
+            <div class="kv-row" role="listitem"><span class="kv-k">LIQUIDITY</span><span class="kv-v">100% BURNT</span></div>
+            <div class="kv-row" role="listitem"><span class="kv-k">UTILITY</span><span class="kv-v">GOVERNANCE</span></div>
+          </div>
+
+          <div class="addr-row">
+            <button
+              type="button"
+              class="addr-box"
+              id="addrBox"
+              title="Click to copy contract address"
+              aria-label="Click to copy $BASIS contract address"
+            ></button>
+            <button type="button" class="copy-btn" id="copyBtn" aria-label="Copy address to clipboard">
+              <svg class="copy-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="9" y="9" width="12" height="12" rx="2" ry="2"></rect>
+                <rect x="3" y="3" width="12" height="12" rx="2" ry="2" opacity="0.7"></rect>
+              </svg>
+            </button>
+          </div>
+          <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+          <div class="explorer-links" role="group" aria-label="Token explorer links">
+            <a id="dexLink" href="#" target="_blank" rel="noopener noreferrer" class="btn">DEXSCREENER</a>
+            <a id="solscanLink" href="#" target="_blank" rel="noopener noreferrer" class="btn">SOLSCAN</a>
+            <a id="pumpLink" href="#" target="_blank" rel="noopener noreferrer" class="btn">PUMP.FUN</a>
+            <a id="orbLink" href="#" target="_blank" rel="noopener noreferrer" class="btn">ORB</a>
+          </div>
+        </section>
+
+      </div><!-- /dash-grid-main -->
+
+      <!-- ── Recent transactions + ecosystem cards ── -->
+      <div class="dash-grid-bottom">
+
+        <!-- Recent activity table -->
+        <section class="panel" aria-label="Recent on-chain activity">
+          <div class="mbar">
+            <div class="mbar-l">
+              <div class="dots" aria-hidden="true">
+                <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+              </div>
+              <div class="mlabel">RECENT ACTIVITY · $BASIS</div>
+            </div>
+            <div class="mstatus live">LIVE</div>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table" aria-label="Recent $BASIS transactions">
+              <thead>
+                <tr>
+                  <th scope="col">TX HASH</th>
+                  <th scope="col">SLOT</th>
+                  <th scope="col">STATUS</th>
+                  <th scope="col">TIME</th>
+                </tr>
+              </thead>
+              <tbody id="txTableBody">
+                <tr><td colspan="4" class="tx-empty">LOADING…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Right column: eco stats + tools -->
+        <div class="eco-stack" aria-label="Ecosystem quick links">
+
+          <!-- Holder distribution -->
+          <section class="panel" aria-label="Holder distribution">
+            <div class="mbar">
+              <div class="mbar-l">
+                <div class="dots" aria-hidden="true">
+                  <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+                </div>
+                <div class="mlabel">HOLDER DISTRIBUTION</div>
+              </div>
+              <div class="mstatus live">LIVE</div>
+            </div>
+            <div class="eco-stats">
+              <div class="eco-stat">
+                <span class="eco-stat-val">1B</span>
+                <span class="eco-stat-label">SUPPLY</span>
+              </div>
+              <div class="eco-stat">
+                <span class="eco-stat-val">50</span>
+                <span class="eco-stat-label">GENESIS NFT</span>
+              </div>
+            </div>
+            <a href="map.html" class="btn" style="width:100%;justify-content:center;display:flex;">
+              [ VIEW HOLDER MAP → ]
+            </a>
+          </section>
+
+          <!-- On-chain tools -->
+          <section class="panel" aria-label="On-chain tools">
+            <div class="mbar">
+              <div class="mbar-l">
+                <div class="dots" aria-hidden="true">
+                  <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+                </div>
+                <div class="mlabel">ON-CHAIN TOOLS</div>
+              </div>
+              <div class="mstatus">READY</div>
+            </div>
+            <nav class="tool-links" aria-label="On-chain tool links">
+              <a href="tools.html#balance" class="tool-link">
+                <span class="tl-icon" aria-hidden="true">◈</span> BALANCE CHECKER
+              </a>
+              <a href="tools.html#nft" class="tool-link">
+                <span class="tl-icon" aria-hidden="true">◆</span> NFT SCANNER
+              </a>
+              <a href="tools.html#pnl" class="tool-link">
+                <span class="tl-icon" aria-hidden="true">▲</span> PNL MONITOR
+              </a>
+            </nav>
+          </section>
+
+        </div><!-- /eco-stack -->
+
+      </div><!-- /dash-grid-bottom -->
+
+    </div><!-- /tab-dashboard -->
+
+
+    <!-- ================================================================== -->
+    <!-- TAB: $BASIS TOKEN                                                  -->
+    <!-- ================================================================== -->
+    <div class="tab-pane" id="tab-token" role="tabpanel" aria-label="$BASIS Token">
+
+      <div class="page-header">
+        <div class="page-title">
+          <span class="prompt-sym" aria-hidden="true">$</span> $BASIS TOKEN
         </div>
-        <div class="mstatus">READY</div>
+        <div class="page-meta">
+          <span class="mstatus live" aria-label="Data status: live">LIVE</span>
+        </div>
       </div>
 
-      <h2>&gt; BASIS TERMINAL</h2>
+      <div class="token-grid">
 
-      <p class="prose">
-        BASIS is building the next-generation terminal for finance and DeFi on Solana. $BASIS is the native ecosystem token powering governance and the broader ecosystem. The Basis Genesis NFT collection serves as the access layer and foundation of the platform.
-      </p>
+        <!-- Tokenomics -->
+        <section class="panel" aria-label="Tokenomics">
+          <div class="mbar">
+            <div class="mbar-l">
+              <div class="dots" aria-hidden="true">
+                <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+              </div>
+              <div class="mlabel">BASIS://TOKENOMICS</div>
+            </div>
+            <div class="mstatus">STATS</div>
+          </div>
+          <h2>&gt; TOKENOMICS</h2>
+          <div class="kv" role="list">
+            <div class="kv-row" role="listitem"><span class="kv-k">SUPPLY</span><span class="kv-v">1,000,000,000</span></div>
+            <div class="kv-row" role="listitem"><span class="kv-k">UTILITY</span><span class="kv-v">Ecosystem &amp; Governance</span></div>
+            <div class="kv-row" role="listitem"><span class="kv-k">LIQUIDITY</span><span class="kv-v">100% Burnt</span></div>
+            <div class="kv-row" role="listitem"><span class="kv-k">NETWORK</span><span class="kv-v">Solana</span></div>
+            <div class="kv-row" role="listitem">
+              <span class="kv-k">PRICE</span>
+              <span class="kv-v" id="tok-price" aria-live="polite">LOADING</span>
+            </div>
+            <div class="kv-row" role="listitem">
+              <span class="kv-k">MARKET CAP</span>
+              <span class="kv-v" id="tok-mcap" aria-live="polite">LOADING</span>
+            </div>
+          </div>
+        </section>
 
-      <div class="btn-row">
-        <a href="https://terminal.databasis.info/" target="_blank" rel="noopener noreferrer" class="btn">
-          [ OPEN TERMINAL ]
-        </a>
-        <a href="https://chat.databasis.info/" target="_blank" rel="noopener noreferrer" class="btn">
-          [ OPEN CHATROOM ]
-        </a>
-      </div>
-    </section>
+        <!-- Contract details -->
+        <section class="panel" aria-label="Contract details">
+          <div class="mbar">
+            <div class="mbar-l">
+              <div class="dots" aria-hidden="true">
+                <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+              </div>
+              <div class="mlabel">BASIS://CONTRACT</div>
+            </div>
+            <div class="mstatus">VERIFY</div>
+          </div>
+          <h2>&gt; CONTRACT DETAILS</h2>
+          <p class="prose" style="margin-bottom:14px">
+            Always verify the official $BASIS contract address before interacting. Cross-check on multiple explorers.
+          </p>
+          <div class="addr-row">
+            <button
+              type="button"
+              class="addr-box"
+              id="addrBox2"
+              title="Click to copy"
+              aria-label="Click to copy $BASIS contract address"
+            ></button>
+            <button type="button" class="copy-btn" id="copyBtn2" aria-label="Copy address">
+              <svg class="copy-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="9" y="9" width="12" height="12" rx="2" ry="2"></rect>
+                <rect x="3" y="3" width="12" height="12" rx="2" ry="2" opacity="0.7"></rect>
+              </svg>
+            </button>
+          </div>
+          <div class="toast" id="toast2" role="status" aria-live="polite"></div>
+          <div class="btn-grid" style="margin-top:16px" role="group" aria-label="Token explorers">
+            <a id="dexLink2"     href="#" target="_blank" rel="noopener noreferrer" class="btn">[ DEXSCREENER ]</a>
+            <a id="solscanLink2" href="#" target="_blank" rel="noopener noreferrer" class="btn">[ SOLSCAN ]</a>
+            <a id="pumpLink2"    href="#" target="_blank" rel="noopener noreferrer" class="btn">[ PUMP.FUN ]</a>
+            <a id="orbLink2"     href="#" target="_blank" rel="noopener noreferrer" class="btn">[ ORB ]</a>
+            <a href="https://moontok.io/coins/basis" target="_blank" rel="noopener noreferrer" class="btn">[ MOONTOK ]</a>
+            <a id="mobyLink"    href="#" target="_blank" rel="noopener noreferrer" class="btn">[ MOBYSCREENER ]</a>
+          </div>
+        </section>
 
-  </main>
+      </div><!-- /token-grid -->
 
-    <div class="sep"><span>LIVE PRICES</span></div>
-
-    <!-- ══════════════════════════════════════════════════════════════ -->
-    <!-- SECTION 3 — LIVE PRICES                                      -->
-    <!-- ══════════════════════════════════════════════════════════════ -->
-    <section class="panel" aria-label="Live price feed">
-      <div class="mbar">
-        <div class="mbar-l">
-          <div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
-          <div class="mlabel">BASIS://PRICE-FEED</div>
-        </div>
-        <div class="mstatus live" id="tickerStatus">FETCHING</div>
-      </div>
-
-      <h2>&gt; SOL / $BASIS PRICE FEED</h2>
-
-      <div class="price-grid">
-        <div class="price-card" id="cardSol">
-          <div class="pc-label">SOL PRICE</div>
-          <div class="pc-val loading" id="solPrice">LOADING</div>
-          <div class="pc-sub">USD</div>
-        </div>
-        <div class="price-card" id="cardBasis">
-          <div class="pc-label">$BASIS PRICE</div>
-          <div class="pc-val loading" id="basisPrice">LOADING</div>
-          <div class="pc-sub">USD</div>
-        </div>
-        <div class="price-card" id="cardMcap">
-          <div class="pc-label">MARKET CAP</div>
-          <div class="pc-val loading" id="basisMcap">LOADING</div>
-          <div class="pc-sub">USD</div>
-        </div>
-      </div>
-
-      <div class="ticker-foot">
-        <div class="last-up" id="lastUpdate">Last update: —</div>
-        <button type="button" class="btn" id="refreshBtn">[ REFRESH ]</button>
-      </div>
-    </section>
-
-  </main>
-
-    <div class="sep"><span>TOKEN</span></div>
-
-    <!-- ══════════════════════════════════════════════════════════════ -->
-    <!-- SECTION 4 — TOKEN                                            -->
-    <!-- ══════════════════════════════════════════════════════════════ -->
-    <div class="g2">
-
-      <!-- Tokenomics -->
-      <section class="panel" aria-label="Tokenomics">
+      <!-- Security notice -->
+      <section class="panel" aria-label="Anti-phishing security notice">
         <div class="mbar">
           <div class="mbar-l">
-            <div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
-            <div class="mlabel">BASIS://TOKENOMICS</div>
+            <div class="dots" aria-hidden="true">
+              <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+            </div>
+            <div class="mlabel">BASIS://SECURITY</div>
           </div>
-          <div class="mstatus">STATS</div>
+          <div class="mstatus" style="color:var(--warn)">NOTICE</div>
         </div>
-        <h2>&gt; TOKENOMICS</h2>
-        <div class="kv" role="list">
-          <div class="kv-row" role="listitem"><span class="kv-k">SUPPLY</span>    <span class="kv-v">1,000,000,000</span></div>
-          <div class="kv-row" role="listitem"><span class="kv-k">UTILITY</span>   <span class="kv-v">Ecosystem &amp; Governance</span></div>
-          <div class="kv-row" role="listitem"><span class="kv-k">LIQUIDITY</span> <span class="kv-v">100% Burnt</span></div>
-          <div class="kv-row" role="listitem"><span class="kv-k">NETWORK</span>   <span class="kv-v">Solana</span></div>
+        <h2>&gt; ANTI-PHISHING NOTICE</h2>
+        <div class="note" role="note">
+          Verify all links and contract details carefully. The only official <strong>$BASIS</strong> token address is:
+          <strong class="addr" id="officialAddr" aria-label="Official $BASIS contract address"></strong>
+          If anyone asks you to use a different address or to "verify" through an unfamiliar site, treat it as suspicious. This site is informational — always verify on-chain before interacting.
         </div>
+        <p class="sub-note">
+          Always double-check on explorers and only interact with what you personally verify.
+        </p>
       </section>
 
-      <!-- Contract -->
-      <section class="panel" aria-label="Contract details">
-        <div class="mbar">
-          <div class="mbar-l">
-            <div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
-            <div class="mlabel">BASIS://CONTRACT</div>
+    </div><!-- /tab-token -->
+
+
+    <!-- ================================================================== -->
+    <!-- TAB: ECOSYSTEM                                                     -->
+    <!-- ================================================================== -->
+    <div class="tab-pane" id="tab-ecosystem" role="tabpanel" aria-label="Ecosystem">
+
+      <div class="page-header">
+        <div class="page-title">
+          <span class="prompt-sym" aria-hidden="true">$</span> ECOSYSTEM
+        </div>
+        <div class="page-meta">
+          <span class="mstatus">BASIS NETWORK</span>
+        </div>
+      </div>
+
+      <div class="eco-grid">
+
+        <!-- Basis Terminal -->
+        <section class="panel" aria-label="Basis Terminal app">
+          <div class="mbar">
+            <div class="mbar-l">
+              <div class="dots" aria-hidden="true">
+                <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+              </div>
+              <div class="mlabel">BASIS://TERMINAL</div>
+            </div>
+            <div class="mstatus live">LIVE</div>
           </div>
-          <div class="mstatus">VERIFY</div>
-        </div>
-        <h2>&gt; CONTRACT DETAILS</h2>
-        <div class="addr-row">
-          <button type="button" class="addr-box" id="addrBox" title="Click to copy" aria-label="Copy contract address"></button>
-          <button type="button" class="copy-btn" id="copyBtn" aria-label="Copy address">
-            <svg class="copy-icon" viewBox="0 0 24 24" aria-hidden="true">
-              <rect x="9" y="9" width="12" height="12" rx="2" ry="2"></rect>
-              <rect x="3" y="3" width="12" height="12" rx="2" ry="2" opacity="0.7"></rect>
-            </svg>
-          </button>
-        </div>
-        <div class="toast" id="toast" role="status" aria-live="polite"></div>
-        <div class="btn-grid" role="group" aria-label="Token explorers">
-          <a id="dexLink"     href="#" target="_blank" rel="noopener noreferrer" class="btn">[ DEXSCREENER ]</a>
-          <a id="solscanLink" href="#" target="_blank" rel="noopener noreferrer" class="btn">[ SOLSCAN ]</a>
-          <a id="pumpLink"    href="#" target="_blank" rel="noopener noreferrer" class="btn">[ PUMP.FUN ]</a>
-          <a id="orbLink"     href="#" target="_blank" rel="noopener noreferrer" class="btn">[ ORB ]</a>
-          <a href="https://moontok.io/coins/basis" target="_blank" rel="noopener noreferrer" class="btn">[ MOONTOK ]</a>
-          <a id="mobyLink"    href="#" target="_blank" rel="noopener noreferrer" class="btn">[ MOBYSCREENER ]</a>
-        </div>
-      </section>
+          <h2>&gt; BASIS TERMINAL</h2>
+          <p class="prose">
+            Next-generation terminal for finance and DeFi on Solana. Real-time analytics, on-chain intelligence, and smart money tracking.
+          </p>
+          <div class="btn-row" style="margin-top:14px">
+            <a href="https://terminal.databasis.info/" target="_blank" rel="noopener noreferrer" class="btn btn-featured">[ OPEN TERMINAL ]</a>
+            <a href="https://chat.databasis.info/" target="_blank" rel="noopener noreferrer" class="btn">[ OPEN CHATROOM ]</a>
+          </div>
+        </section>
 
-    </div><!-- /g2 -->
+        <!-- Genesis NFT Collection -->
+        <section class="panel" aria-label="BASIS Genesis NFT collection">
+          <div class="mbar">
+            <div class="mbar-l">
+              <div class="dots" aria-hidden="true">
+                <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+              </div>
+              <div class="mlabel">BASIS://GENESIS</div>
+            </div>
+            <div class="mstatus live">LIVE</div>
+          </div>
+          <h2>&gt; GENESIS COLLECTION</h2>
+          <p class="prose">
+            First official NFT drop of the BASIS ecosystem.<br>
+            50 identical Basis badges with upcoming utility and rewards.
+          </p>
+          <div class="btn-grid" style="margin-top:14px" role="group" aria-label="NFT marketplaces">
+            <a href="https://magiceden.io/marketplace/basis" target="_blank" rel="noopener noreferrer" class="btn">[ MAGIC EDEN ]</a>
+            <a href="https://www.tensor.trade/trade/basis"   target="_blank" rel="noopener noreferrer" class="btn">[ TENSOR ]</a>
+          </div>
+        </section>
 
-  </main>
+        <!-- NFT Builder -->
+        <section class="panel" aria-label="BASIS NFT Builder tool">
+          <div class="mbar">
+            <div class="mbar-l">
+              <div class="dots" aria-hidden="true">
+                <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+              </div>
+              <div class="mlabel">BASIS://NFT-BUILDER</div>
+            </div>
+            <div class="mstatus live">LIVE</div>
+          </div>
+          <h2>&gt; BASIS NFT BUILDER</h2>
+          <p class="prose">
+            Create and export Solana NFTs and full generative collections. Configure Metaplex-compatible metadata and download files ready for deployment.
+          </p>
+          <a href="https://nft.databasis.info/" target="_blank" rel="noopener noreferrer" class="btn btn-featured" style="margin-top:14px">[ LAUNCH NFT BUILDER ]</a>
+          <a href="https://deployer.databasis.info/" target="_blank" rel="noopener noreferrer" class="btn" style="width:100%;justify-content:center;display:flex;margin-top:8px">[ LAUNCH DEPLOYER ]</a>
+        </section>
 
-  <!-- ══════════════════════════════════════════════════════════════ -->
-  <!-- SECTION 5 — HOLDER MAP CTA                                   -->
-  <!-- ══════════════════════════════════════════════════════════════ -->
-  <div class="sep"><span>Holder Map</span></div>
-  <section class="panel" style="text-align:center;padding:32px 24px;">
-    <div class="mbar">
-      <div class="mbar-l">
-        <div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
-        <div class="mlabel">BASIS://HOLDER-MAP</div>
-      </div>
-      <div class="mstatus">LIVE</div>
-    </div>
-    <h2>&gt; $BASIS HOLDER MAP</h2>
-    <p class="prose" style="max-width:520px;margin:0 auto 20px;">Explore the full on-chain distribution of $BASIS holders. Each square represents a wallet — sized by holdings, colored by tier. Pan, zoom, drag, and click to inspect any address.</p>
-    <a class="btn" href="map.html">[ OPEN HOLDER MAP → ]</a>
-  </section>
+        <!-- DeFi Tower Defense -->
+        <section class="panel" aria-label="DeFi Tower Defense game">
+          <div class="mbar">
+            <div class="mbar-l">
+              <div class="dots" aria-hidden="true">
+                <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+              </div>
+              <div class="mlabel">BASIS://GAME</div>
+            </div>
+            <div class="mstatus live">LIVE</div>
+          </div>
+          <h2>&gt; DEFI TOWER DEFENSE</h2>
+          <p class="prose">
+            Defend the Protocol across 7 stages and 105 waves of escalating DeFi threats. Deploy validators, liquidity pools, and on-chain defenses to protect the CORE from exploits, 51% attacks, and flash loan floods.
+          </p>
+          <a href="https://game.databasis.info/" target="_blank" rel="noopener noreferrer" class="btn btn-featured" style="margin-top:14px">[ PLAY NOW ]</a>
+        </section>
 
-  <!-- ══════════════════════════════════════════════════════════════ -->
-  <!-- SECTION 6 — GENESIS COLLECTION                               -->
-  <!-- ══════════════════════════════════════════════════════════════ -->
-  <div class="sep"><span>Genesis Collection</span></div>
-  <section class="panel" aria-label="BASIS Genesis NFT collection">
-    <div class="mbar">
-      <div class="mbar-l">
-        <div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
-        <div class="mlabel">BASIS://GENESIS</div>
-      </div>
-      <div class="mstatus">LIVE</div>
-    </div>
+        <!-- On-Chain Tools -->
+        <section class="panel" aria-label="On-chain analytics tools">
+          <div class="mbar">
+            <div class="mbar-l">
+              <div class="dots" aria-hidden="true">
+                <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+              </div>
+              <div class="mlabel">BASIS://TOOLS</div>
+            </div>
+            <div class="mstatus">READY</div>
+          </div>
+          <h2>&gt; ON-CHAIN TOOLS</h2>
+          <p class="prose">
+            Inspect any Solana wallet on-chain. Check SOL and $BASIS balances, scan for Genesis NFT holdings, and analyze your full trading history with FIFO realized PnL, unrealized exposure, ROI, and win rate.
+          </p>
+          <div class="btn-grid" style="margin-top:14px" role="group" aria-label="On-chain tool links">
+            <a href="tools.html#balance" class="btn">[ BALANCE CHECKER ]</a>
+            <a href="tools.html#nft"     class="btn">[ NFT SCAN ]</a>
+            <a href="tools.html#pnl"     class="btn">[ PNL MONITOR ]</a>
+            <a href="map.html"           class="btn">[ HOLDER MAP ]</a>
+          </div>
+        </section>
 
-    <h2>&gt; BASIS GENESIS COLLECTION</h2>
-    <p class="prose">
-      First official NFT drop of the BASIS ecosystem.<br>
-      50 identical Basis badges with upcoming utility and rewards.
-    </p>
+      </div><!-- /eco-grid -->
 
-    <div class="btn-grid" role="group" aria-label="Genesis collection marketplaces">
-      <a href="https://magiceden.io/marketplace/basis" target="_blank" rel="noopener noreferrer" class="btn">[ MAGIC EDEN ]</a>
-      <a href="https://www.tensor.trade/trade/basis"   target="_blank" rel="noopener noreferrer" class="btn">[ TENSOR ]</a>
-    </div>
+    </div><!-- /tab-ecosystem -->
 
-    <div class="builder-section">
-      <h2>&gt; BASIS NFT BUILDER</h2>
-      <p class="prose">
-        Create and export Solana NFTs and full collections with the BASIS NFT Builder — a professional tool for artists, developers and deployers. Build single NFTs or generative collections, configure Metaplex-compatible metadata, and download your files ready for deployment.
-      </p>
-      <a href="https://nft.databasis.info/" target="_blank" rel="noopener noreferrer" class="btn btn-featured">[ LAUNCH NFT BUILDER ]</a>
-      <a href="https://deployer.databasis.info/" target="_blank" rel="noopener noreferrer" class="btn">[ LAUNCH DEPLOYER ]</a>
-    </div>
-  </section>
 
-  <!-- ══════════════════════════════════════════════════════════════ -->
-  <!-- SECTION 7 — ON-CHAIN TOOLS CTA                               -->
-  <!-- ══════════════════════════════════════════════════════════════ -->
-  <div class="sep"><span>On-Chain Tools</span></div>
-  <section class="panel">
-    <div class="mbar">
-      <div class="mbar-l">
-        <div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
-        <div class="mlabel">BASIS://TOOLS</div>
-      </div>
-      <div class="mstatus">LIVE</div>
-    </div>
-    <h2>&gt; ON-CHAIN TOOLS</h2>
-    <p class="prose">Inspect any Solana wallet on-chain. Check SOL and $BASIS balances, scan for Genesis NFT holdings, and analyze your full $BASIS trading history with FIFO realized PnL, unrealized exposure, ROI, and win rate.</p>
-    <div class="btn-grid">
-      <a href="tools.html#balance"  class="btn">[ BALANCE CHECKER ]</a>
-      <a href="tools.html#nft"      class="btn">[ NFT SCAN ]</a>
-      <a href="tools.html#pnl"      class="btn">[ PnL MONITOR ]</a>
-    </div>
-  </section>
+    <!-- ================================================================== -->
+    <!-- FOOTER                                                             -->
+    <!-- ================================================================== -->
+    <footer class="terminal-footer" aria-label="Terminal session info">
 
-  <!-- ══════════════════════════════════════════════════════════════ -->
-  <!-- SECTION 8 — GAME                                             -->
-  <!-- ══════════════════════════════════════════════════════════════ -->
-  <div class="sep"><span>Play</span></div>
-  <section class="panel" aria-label="BASIS DeFi Tower Defense game">
-    <div class="mbar">
-      <div class="mbar-l">
-        <div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
-        <div class="mlabel">BASIS://GAME</div>
-      </div>
-      <div class="mstatus">LIVE</div>
-    </div>
-    <h2>&gt; DEFI TOWER DEFENSE</h2>
-    <p class="prose">Defend the Protocol across 7 stages and 105 waves of escalating DeFi threats. Deploy validators, liquidity pools, and on-chain defenses to protect the CORE from exploits, 51% attacks, and flash loan floods. Each stage brings a new map, a new threat color, and a harder enemy — survive all stages to secure $BASIS.</p>
-    <a href="https://game.databasis.info/" target="_blank" rel="noopener noreferrer" class="btn btn-featured">[ PLAY NOW ]</a>
-  </section>
-
-  <!-- ══════════════════════════════════════════════════════════════ -->
-  <!-- SECTION 9 — SECURITY                                         -->
-  <!-- ══════════════════════════════════════════════════════════════ -->
-  <div class="sep"><span>Security</span></div>
-  <section class="panel" aria-label="Anti-phishing security notice">
-    <div class="mbar">
-      <div class="mbar-l">
-        <div class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
-        <div class="mlabel">BASIS://SECURITY</div>
-      </div>
-      <div class="mstatus">NOTICE</div>
-    </div>
-    <h2>&gt; ANTI-PHISHING NOTICE</h2>
-    <div class="note" role="note">
-      Verify all links and contract details carefully. The only official <strong>$BASIS</strong> token address is:
-      <strong class="addr" id="officialAddr"></strong>
-      If anyone asks you to use a different address or to "verify" through an unfamiliar site, treat it as suspicious. This site is informational — always verify on-chain before interacting.
-    </div>
-    <p class="sub-note">
-      Always double-check on explorers and only interact with what you personally verify.
-    </p>
-  </section>
-
-  <!-- ══════════════════════════════════════════════════════════════ -->
-  <!-- SECTION 9 — COMMUNITY                                        -->
-  <!-- ══════════════════════════════════════════════════════════════ -->
-  <!-- ══════════════════════════════════════════════════════════════ -->
-  <!-- SECTION 10 — FOOTER                                           -->
-  <!-- ══════════════════════════════════════════════════════════════ -->
-  <footer>
-    <div class="session-log">
-      <span>── SESSION LOG · <span id="timestamp"></span> ──</span>
-    </div>
-
-    <div class="footer-grid">
-      <div class="footer-copy">
-        <span class="prompt">basis:~$</span>
-        © 2026 BASIS TERMINAL. ALL RIGHTS RESERVED.<span class="cursor-sm" aria-hidden="true"></span>
+      <div class="tf-left">
+        <span aria-hidden="true" style="color:var(--text-mute)">basis:~$</span>
+        <span id="tf-timestamp" aria-live="polite" aria-label="Current UTC time"></span>
+        <span aria-hidden="true" style="color:var(--border-hi)">·</span>
+        <span aria-label="Current Solana block">
+          BLOCK <span id="tf-block-count">—</span>
+        </span>
       </div>
 
-      <div class="footer-status">
-        <span><span class="dot"></span> UPTIME 99.97%</span>
-        <span><span class="dot"></span> LATENCY 12ms</span>
+      <div class="tf-right">
+        <a href="https://x.com/solbasis"       target="_blank" rel="noopener noreferrer" class="footer-social-link">[ X ]</a>
+        <span class="fsl-sep" aria-hidden="true">//</span>
+        <a href="https://t.me/solbasis"        target="_blank" rel="noopener noreferrer" class="footer-social-link">[ TG ]</a>
+        <span class="fsl-sep" aria-hidden="true">//</span>
+        <a href="https://github.com/solbasis" target="_blank" rel="noopener noreferrer" class="footer-social-link">[ GH ]</a>
       </div>
 
-      <div class="footer-block">
-        BLOCK <span class="block-num" id="block-count">19,847,203</span>
-      </div>
-    </div>
+    </footer>
 
-    <hr class="footer-divider">
+  </main><!-- /main-content -->
 
-    <div class="footer-social">
-      <a href="https://x.com/solbasis" target="_blank" rel="noopener noreferrer" class="footer-social-link">
-        <span class="fsl-bracket">[</span> X / TWITTER <span class="fsl-bracket">]</span>
-      </a>
-      <span class="fsl-sep">//</span>
-      <a href="https://t.me/solbasis" target="_blank" rel="noopener noreferrer" class="footer-social-link">
-        <span class="fsl-bracket">[</span> TELEGRAM <span class="fsl-bracket">]</span>
-      </a>
-      <span class="fsl-sep">//</span>
-      <a href="https://github.com/solbasis" target="_blank" rel="noopener noreferrer" class="footer-social-link">
-        <span class="fsl-bracket">[</span> GITHUB <span class="fsl-bracket">]</span>
-      </a>
-    </div>
-
-    <div class="footer-bottom">
-      <div class="footer-hash">TX: 0x<span id="tx-hash">a7f3c9e1d204b8</span></div>
-    </div>
-  </footer>
-
-  <script src="js/main.js" type="module"></script>
+  <script src="js/terminal-main.js" type="module"></script>
 </body>
 </html>

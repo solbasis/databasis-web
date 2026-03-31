@@ -31,6 +31,7 @@ async function fetchDexScreener() {
 
   let solPrice = null, basisPrice = null;
   let solVol   = 0,   basisVol   = 0;
+  let basisLiq = null, basisChange24h = null;
 
   for (const pair of pairs) {
     const base  = pair.baseToken?.address ?? '';
@@ -41,7 +42,12 @@ async function fetchDexScreener() {
 
     if (base === BASIS_MINT || quote === BASIS_MINT) {
       const p = base === BASIS_MINT ? price : 1 / price;
-      if (vol > basisVol) { basisPrice = p; basisVol = vol; }
+      if (vol > basisVol) {
+        basisPrice     = p;
+        basisVol       = vol;
+        basisLiq       = pair.liquidity?.usd ?? null;
+        basisChange24h = pair.priceChange?.h24 ?? null;
+      }
     }
     if (base === SOL_MINT || quote === SOL_MINT) {
       const p = base === SOL_MINT ? price : 1 / price;
@@ -49,7 +55,7 @@ async function fetchDexScreener() {
     }
   }
 
-  return { sol: solPrice, basis: basisPrice };
+  return { sol: solPrice, basis: basisPrice, basisVol, basisLiq, basisChange24h };
 }
 
 // ── Source 2: Jupiter (fallback) ──────────────────────────────────────────────
@@ -78,7 +84,7 @@ async function fetchHeliusDAS(mint) {
   return d?.result?.token_info?.price_info?.price_per_token ?? null;
 }
 
-// ── Set card state ────────────────────────────────────────────────────────────
+// ── Set card state (legacy DOM elements) ──────────────────────────────────────
 function setCard(id, text, state = '') {
   const el = document.getElementById(id);
   if (!el) return;
@@ -90,23 +96,28 @@ function setCard(id, text, state = '') {
 async function fetchPrices() {
   const statusEl = document.getElementById('tickerStatus');
   const updateEl = document.getElementById('lastUpdate');
-  if (!statusEl) return;
 
-  statusEl.textContent = 'FETCHING';
-  statusEl.classList.remove('live');
+  if (statusEl) {
+    statusEl.textContent = 'FETCHING';
+    statusEl.classList.remove('live');
+  }
 
   setCard('solPrice',   'LOADING', 'loading');
   setCard('basisPrice', 'LOADING', 'loading');
   setCard('basisMcap',  'LOADING', 'loading');
 
   let solPrice = null, basisPrice = null;
+  let basisVol = 0, basisLiq = null, basisChange24h = null;
 
   try {
     // Source 1: DexScreener
     try {
       const dex = await fetchDexScreener();
-      solPrice   = dex.sol;
-      basisPrice = dex.basis;
+      solPrice       = dex.sol;
+      basisPrice     = dex.basis;
+      basisVol       = dex.basisVol ?? 0;
+      basisLiq       = dex.basisLiq;
+      basisChange24h = dex.basisChange24h;
     } catch (e) { console.warn('[prices] DexScreener:', e.message); }
 
     // Source 2: Jupiter (fill gaps)
@@ -130,18 +141,33 @@ async function fetchPrices() {
       } catch (e) { console.warn('[prices] Helius DAS:', e.message); }
     }
 
-    // Render
+    // ── Render legacy price cards (old index layout) ──────────────────────────
     setCard('solPrice',   solPrice   ? `$${fmtNum(solPrice, 2)}` : 'N/A', solPrice   ? '' : 'err');
     setCard('basisPrice', basisPrice ? `$${basisPrice < 0.001 ? basisPrice.toFixed(8) : fmtNum(basisPrice, 6)}` : 'N/A', basisPrice ? '' : 'err');
     setCard('basisMcap',  basisPrice ? fmtUSD(basisPrice * BASIS_SUPPLY) : 'N/A', basisPrice ? '' : 'err');
 
     document.querySelectorAll('.price-card').forEach(c => c.classList.add('lit'));
-    statusEl.textContent = 'LIVE';
-    statusEl.classList.add('live');
+
+    if (statusEl) {
+      statusEl.textContent = 'LIVE';
+      statusEl.classList.add('live');
+    }
     if (updateEl) updateEl.textContent = `Last update: ${nowStr()}`;
 
+    // ── Dispatch event for terminal dashboard ─────────────────────────────────
+    window.dispatchEvent(new CustomEvent('basisPriceUpdate', {
+      detail: {
+        basisPrice,
+        solPrice,
+        mcap:          basisPrice ? basisPrice * BASIS_SUPPLY : null,
+        vol24h:        basisVol || null,
+        liq:           basisLiq,
+        priceChange24h: basisChange24h,
+      },
+    }));
+
   } catch (err) {
-    statusEl.textContent = 'ERROR';
+    if (statusEl) statusEl.textContent = 'ERROR';
     ['solPrice', 'basisPrice', 'basisMcap'].forEach(id => setCard(id, 'ERR', 'err'));
     if (updateEl) updateEl.textContent = `Failed ${nowStr()} — ${err.message}`;
     console.error('[prices]', err);
@@ -150,10 +176,12 @@ async function fetchPrices() {
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 export function initPrices() {
-  const btn = document.getElementById('refreshBtn');
-  if (!btn) return;
-
   fetchPrices();
   setInterval(fetchPrices, 60_000);
-  btn.addEventListener('click', fetchPrices);
+
+  // Legacy refresh button (old layout)
+  document.getElementById('refreshBtn')?.addEventListener('click', fetchPrices);
+
+  // Terminal dashboard refresh trigger
+  window.addEventListener('refreshPrices', fetchPrices);
 }
