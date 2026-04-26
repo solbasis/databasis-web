@@ -407,12 +407,14 @@ function initPriceListener() {
    Recent transactions
    ──────────────────────────────────────────────────────────── */
 
+// The dashboard's recent-activity table has 4 columns: TX HASH, SLOT,
+// STATUS, TIME. The TX HASH cell already wraps the signature in a Solscan
+// link so we don't need a separate explorer-link column.
 function renderSkeletonRows(tbody, count = 5) {
   tbody.innerHTML = '';
   for (let i = 0; i < count; i++) {
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td><span class="mc-val loading">——</span></td>
       <td><span class="mc-val loading">——</span></td>
       <td><span class="mc-val loading">——</span></td>
       <td><span class="mc-val loading">——</span></td>
@@ -423,11 +425,15 @@ function renderSkeletonRows(tbody, count = 5) {
 }
 
 function renderEmptyRow(tbody, message = 'No transactions found') {
-  tbody.innerHTML = `<tr><td colspan="5" class="tx-empty">${message}</td></tr>`;
+  tbody.innerHTML = `<tr><td colspan="4" class="tx-empty">${message}</td></tr>`;
 }
 
 async function fetchRecentTxs() {
-  const tbody = document.querySelector('#txTable tbody');
+  // The HTML table puts its id on the <tbody> directly, not the <table>.
+  // (Earlier refactor missed updating this selector — symptom was the
+  // dashboard sitting on "LOADING…" forever because the early-return
+  // fired and the skeleton/data-render path never ran.)
+  const tbody = document.getElementById('txTableBody');
   if (!tbody) return;
 
   renderSkeletonRows(tbody, 5);
@@ -468,16 +474,15 @@ async function fetchRecentTxs() {
       const statusCls = err ? 'type-sell' : 'type-buy';
 
       const tr = document.createElement('tr');
+      // Column order matches the table headers: TX HASH, SLOT, STATUS, TIME.
+      // TX HASH is the explorer link so a separate ↗ column would be redundant.
       tr.innerHTML = `
         <td>
           <a class="tx-link" href="https://solscan.io/tx/${sig}" target="_blank" rel="noopener noreferrer">${shortSig}</a>
         </td>
         <td>${Number(slot).toLocaleString()}</td>
-        <td>${timeStr}</td>
         <td class="${statusCls}">${statusStr}</td>
-        <td>
-          <a class="tx-link" href="https://solscan.io/tx/${sig}" target="_blank" rel="noopener noreferrer">↗</a>
-        </td>
+        <td>${timeStr}</td>
       `;
       tbody.appendChild(tr);
     });
