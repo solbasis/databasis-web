@@ -491,3 +491,199 @@
     animation: none;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BASIS BURN integration (announcement strip, sidebar/topbar buttons,
+   ecosystem panel, dashboard tool link). Red theme so the burn CTAs stand
+   out from the green-on-black ecosystem palette without clashing.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Topbar button — red theme, distinct from the green [TERMINAL] button */
+.btn.btn-burn-cta {
+  color: #ff9494;
+  border-color: rgba(255, 106, 106, 0.45);
+  background: linear-gradient(180deg, rgba(255, 106, 106, 0.10) 0%, rgba(255, 106, 106, 0.03) 100%);
+  box-shadow: 0 0 0 1px rgba(255, 106, 106, 0.18), 0 0 14px rgba(255, 106, 106, 0.18);
+  transition: background .15s, border-color .15s, box-shadow .15s, color .15s;
+}
+.btn.btn-burn-cta:hover {
+  color: #ffd0d0;
+  border-color: #ff6a6a;
+  background: linear-gradient(180deg, rgba(255, 106, 106, 0.22) 0%, rgba(255, 106, 106, 0.08) 100%);
+  box-shadow: 0 0 0 1px #ff6a6a, 0 0 24px rgba(255, 106, 106, 0.40);
+}
+
+/* Sidebar burn link — slight red tint + always-visible NEW pill */
+.nav-item.nav-burn { position: relative; }
+.nav-item.nav-burn .nav-icon {
+  filter: drop-shadow(0 0 4px rgba(255, 106, 106, 0.55));
+}
+.nav-badge {
+  margin-left: auto;
+  font-size: 0.55rem;
+  letter-spacing: 1.5px;
+  background: rgba(255, 106, 106, 0.14);
+  color: #ff9494;
+  border: 1px solid rgba(255, 106, 106, 0.40);
+  border-radius: 999px;
+  padding: 2px 7px;
+  font-weight: 600;
+}
+
+/* Dashboard top-of-page announcement strip */
+.burn-announce {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0 0 22px;
+  padding: 14px 18px;
+  background:
+    linear-gradient(90deg, rgba(255, 106, 106, 0.10) 0%, rgba(255, 106, 106, 0.03) 60%, transparent 100%),
+    var(--surface, rgba(20, 35, 18, 0.55));
+  border: 1px solid rgba(255, 106, 106, 0.30);
+  border-radius: 10px;
+  color: var(--text, #cfe6b8);
+  text-decoration: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.84rem;
+  position: relative;
+  overflow: hidden;
+  transition: border-color .2s, background .2s, transform .15s, box-shadow .2s;
+}
+.burn-announce:hover {
+  border-color: rgba(255, 106, 106, 0.65);
+  background:
+    linear-gradient(90deg, rgba(255, 106, 106, 0.18) 0%, rgba(255, 106, 106, 0.06) 60%, transparent 100%),
+    var(--surface, rgba(20, 35, 18, 0.55));
+  box-shadow: 0 0 24px rgba(255, 106, 106, 0.20);
+  transform: translateY(-1px);
+}
+.burn-announce .ba-pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ff6a6a;
+  box-shadow: 0 0 8px #ff6a6a;
+  animation: burn-announce-pulse 1.6s ease-in-out infinite;
+  flex-shrink: 0;
+}
+.burn-announce .ba-flame {
+  font-size: 1.2rem;
+  line-height: 1;
+  filter: drop-shadow(0 0 6px rgba(255, 106, 106, 0.55));
+  flex-shrink: 0;
+}
+.burn-announce .ba-text {
+  flex: 1;
+  letter-spacing: 0.2px;
+  line-height: 1.4;
+}
+.burn-announce .ba-text b {
+  color: #ff9494;
+  letter-spacing: 2px;
+  font-weight: 600;
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  background: rgba(255, 106, 106, 0.14);
+  border: 1px solid rgba(255, 106, 106, 0.40);
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-right: 4px;
+}
+.burn-announce .ba-text strong {
+  color: #ffd0d0;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+}
+.burn-announce .ba-cta {
+  color: #ff9494;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  flex-shrink: 0;
+  padding: 4px 10px;
+  border: 1px solid rgba(255, 106, 106, 0.40);
+  border-radius: 6px;
+  background: rgba(255, 106, 106, 0.06);
+  transition: background .15s, color .15s, border-color .15s;
+}
+.burn-announce:hover .ba-cta {
+  color: #ffd0d0;
+  border-color: #ff6a6a;
+  background: rgba(255, 106, 106, 0.18);
+}
+@keyframes burn-announce-pulse {
+  0%, 100% { transform: scale(1);   opacity: 0.9; }
+  50%      { transform: scale(1.4); opacity: 1;   }
+}
+
+/* Mobile — stack the announcement vertically so nothing overflows on phones */
+@media (max-width: 700px) {
+  .burn-announce {
+    flex-wrap: wrap;
+    padding: 12px 14px;
+    gap: 10px;
+  }
+  .burn-announce .ba-text { flex: 1 1 100%; font-size: 0.78rem; }
+  .burn-announce .ba-cta  { margin-left: auto; }
+}
+
+/* Dashboard "On-Chain Tools" tool-link variant — burn entry styled red */
+.tool-link.tool-link-burn {
+  color: #ff9494;
+  border-color: rgba(255, 106, 106, 0.30);
+  position: relative;
+}
+.tool-link.tool-link-burn:hover {
+  color: #ffd0d0;
+  border-color: rgba(255, 106, 106, 0.55);
+  background: rgba(255, 106, 106, 0.05);
+}
+.tool-link.tool-link-burn .tl-icon {
+  filter: drop-shadow(0 0 4px rgba(255, 106, 106, 0.55));
+}
+.tl-badge {
+  margin-left: auto;
+  font-size: 0.55rem;
+  letter-spacing: 1.5px;
+  font-weight: 600;
+  background: rgba(255, 106, 106, 0.14);
+  color: #ff9494;
+  border: 1px solid rgba(255, 106, 106, 0.40);
+  border-radius: 999px;
+  padding: 2px 7px;
+}
+
+/* Ecosystem tab — featured BASIS BURN panel gets a soft red border so it
+   reads as a flagship/new card without breaking the grid rhythm. */
+.panel.panel-burn {
+  border-color: rgba(255, 106, 106, 0.32);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 106, 106, 0.06),
+    0 0 28px rgba(255, 106, 106, 0.10);
+}
+.panel.panel-burn h2 {
+  color: #ff9494;
+  text-shadow: 0 0 14px rgba(255, 106, 106, 0.35);
+}
+.panel.panel-burn .mbar {
+  border-bottom-color: rgba(255, 106, 106, 0.18);
+}
+.panel.panel-burn .mstatus.live {
+  color: #ff9494;
+}
+.panel.panel-burn .btn.btn-featured {
+  background: linear-gradient(180deg, rgba(255, 106, 106, 0.16) 0%, rgba(255, 106, 106, 0.05) 100%);
+  border-color: rgba(255, 106, 106, 0.50);
+  color: #ffd0d0;
+}
+.panel.panel-burn .btn.btn-featured:hover {
+  background: linear-gradient(180deg, rgba(255, 106, 106, 0.30) 0%, rgba(255, 106, 106, 0.10) 100%);
+  border-color: #ff6a6a;
+  box-shadow: 0 0 24px rgba(255, 106, 106, 0.45);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .burn-announce .ba-pulse { animation: none; }
+}
