@@ -14,17 +14,15 @@ document.addEventListener('DOMContentLoaded', () => {
   setupAddrCopy('addrBox2', 'copyBtn2', 'toast2');
 
   // ── Explorer links (token tab secondary set) ──────────────────────────────
-  setHref('dexLink2',     `https://dexscreener.com/solana/${BASIS_MINT}`);
-  setHref('solscanLink2', `https://solscan.io/token/${BASIS_MINT}`);
-  setHref('pumpLink2',    `https://pump.fun/coin/${BASIS_MINT}`);
-  setHref('orbLink2',     `https://orb.helius.dev/address/${BASIS_MINT}/markets?sort_by=volume24h&sort_type=desc`);
-  setHref('mobyLink',     `https://www.mobyscreener.com/solana/${BASIS_MINT}`);
+  setHref('dexLink2',  `https://dexscreener.com/solana/${BASIS_MINT}`);
+  setHref('orbLink2',  `https://orbmarkets.io/token/${BASIS_MINT}`);
+  setHref('pumpLink2', `https://pump.fun/coin/${BASIS_MINT}`);
+  setHref('mobyLink',  `https://www.mobyscreener.com/solana/${BASIS_MINT}`);
 
   // ── Explorer links (dashboard tab) ───────────────────────────────────────
-  setHref('dexLink',     `https://dexscreener.com/solana/${BASIS_MINT}`);
-  setHref('solscanLink', `https://solscan.io/token/${BASIS_MINT}`);
-  setHref('pumpLink',    `https://pump.fun/coin/${BASIS_MINT}`);
-  setHref('orbLink',     `https://orb.helius.dev/address/${BASIS_MINT}/markets?sort_by=volume24h&sort_type=desc`);
+  setHref('dexLink',  `https://dexscreener.com/solana/${BASIS_MINT}`);
+  setHref('orbLink',  `https://orbmarkets.io/token/${BASIS_MINT}`);
+  setHref('pumpLink', `https://pump.fun/coin/${BASIS_MINT}`);
 
   // ── Official address (security section) ──────────────────────────────────
   const officialEl = document.getElementById('officialAddr');

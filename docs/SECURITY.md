@@ -64,7 +64,7 @@ of which would have to fail for an attack to succeed.
 
 Nothing the project operates can sweep, freeze, or transfer user funds.
 
-- The token mint authority is **revoked** (verifiable on Solscan)
+- The token mint authority is **revoked** (verifiable on [Orb](https://orbmarkets.io/token/A5BJBQUTR5sTzkM89hRDuApWyvgjdXpR7B7rW1r9pump))
 - The token freeze authority is **revoked**
 - The DAO has no authority over external user wallets — only over its own treasury
 - No project-operated hot wallet exists at scale

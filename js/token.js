@@ -8,11 +8,10 @@ function setHref(id, url) {
 
 function initLinks() {
   document.getElementById('addrBox').textContent = BASIS_MINT;
-  setHref('dexLink',     `https://dexscreener.com/solana/${BASIS_MINT}`);
-  setHref('solscanLink', `https://solscan.io/token/${BASIS_MINT}`);
-  setHref('pumpLink',    `https://pump.fun/coin/${BASIS_MINT}`);
-  setHref('orbLink',     `https://orb.helius.dev/address/${BASIS_MINT}/markets?sort_by=volume24h&sort_type=desc`);
-  setHref('mobyLink',    `https://www.mobyscreener.com/solana/${BASIS_MINT}`);
+  setHref('dexLink',  `https://dexscreener.com/solana/${BASIS_MINT}`);
+  setHref('orbLink',  `https://orbmarkets.io/token/${BASIS_MINT}`);
+  setHref('pumpLink', `https://pump.fun/coin/${BASIS_MINT}`);
+  setHref('mobyLink', `https://www.mobyscreener.com/solana/${BASIS_MINT}`);
 }
 
 function initCopy() {

@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(wc -l /c/Users/PC/Desktop/basis/databasis-web/css/*.css /c/Users/PC/Desktop/basis/databasis-web/js/*.js)"
+    ]
+  }
+}

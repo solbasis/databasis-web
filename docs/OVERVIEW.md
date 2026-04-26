@@ -77,4 +77,4 @@ reviews (no critical or high findings).
 - X: [@solbasis](https://x.com/solbasis)
 - Telegram: [@solbasis](https://t.me/solbasis)
 - GitHub: [github.com/solbasis](https://github.com/solbasis)
-- Verify the official $BASIS contract address on Dexscreener, Solscan, Pump.fun, and Orb before interacting. Anti-phishing first.
+- Verify the official $BASIS contract address on Dexscreener, Orb, and Pump.fun before interacting. Anti-phishing first.

@@ -601,7 +601,7 @@ function buildActivityRow(act) {
     <td class="num">${act.solAmount > 0 ? fmtSolAmount(act.solAmount) : '—'}</td>
     <td>
       <a class="tx-link wallet-link"
-         href="https://solscan.io/account/${act.wallet}"
+         href="https://orbmarkets.io/account/${act.wallet}"
          target="_blank" rel="noopener noreferrer"
          title="${act.wallet}">${shortAddr(act.wallet)}</a>
     </td>
@@ -612,12 +612,12 @@ function buildActivityRow(act) {
   // Wallet cell stops propagation so it goes to the account page instead.
   tr.addEventListener('click', (e) => {
     if (e.target.closest('a')) return;       // honor inner link clicks
-    window.open(`https://solscan.io/tx/${act.sig}`, '_blank', 'noopener,noreferrer');
+    window.open(`https://orbmarkets.io/tx/${act.sig}`, '_blank', 'noopener,noreferrer');
   });
   tr.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
-      window.open(`https://solscan.io/tx/${act.sig}`, '_blank', 'noopener,noreferrer');
+      window.open(`https://orbmarkets.io/tx/${act.sig}`, '_blank', 'noopener,noreferrer');
     }
   });
 

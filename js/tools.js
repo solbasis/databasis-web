@@ -264,7 +264,7 @@ function renderTable() {
         ? `<span class="${pnlCls(t._pnl)}">${fmtUSD(t._pnl, true)}</span>`
         : '<span class="pnl-neu">—</span>';
     const txLink = t.sig
-      ? `<a href="https://solscan.io/tx/${esc(t.sig)}" target="_blank" rel="noopener noreferrer" style="color:var(--text-dim);text-decoration:none;font-size:0.70rem;" title="${esc(t.sig)}">${shortSig(t.sig)}</a>`
+      ? `<a href="https://orbmarkets.io/tx/${esc(t.sig)}" target="_blank" rel="noopener noreferrer" style="color:var(--text-dim);text-decoration:none;font-size:0.70rem;" title="${esc(t.sig)}">${shortSig(t.sig)}</a>`
       : '—';
     return `<tr>
       <td>${badge}</td>
