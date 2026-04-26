@@ -7,6 +7,15 @@ export const BASIS_SUPPLY = 1_000_000_000;
 export const HELIUS_KEY   = '00ddde2e-972f-4cbf-a505-f17e13f54dfb';
 export const HELIUS_URL     = `https://mainnet.helius-rpc.com/?api-key=${HELIUS_KEY}`;
 export const HELIUS_TXS_URL = `https://api-mainnet.helius-rpc.com/v0/transactions/?api-key=${HELIUS_KEY}`;
+// Enhanced API base for the GET /v0/addresses/{address}/transactions endpoint.
+// 100 credits per call but returns parsed swaps/transfers with tokenTransfers,
+// nativeTransfers, source (DEX), and type already decoded — so we can render
+// real activity (BUY/SELL/TRANSFER + amounts + DEX) instead of opaque sigs.
+export const HELIUS_ENHANCED_BASE = `https://api-mainnet.helius-rpc.com/v0`;
+export function heliusAddrTxsUrl(addr, params = {}) {
+  const qs = new URLSearchParams({ 'api-key': HELIUS_KEY, ...params }).toString();
+  return `${HELIUS_ENHANCED_BASE}/addresses/${encodeURIComponent(addr)}/transactions?${qs}`;
+}
 export const USDC_MINT      = 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v';
 
 export const DEX_LINK     = 'https://dexscreener.com/solana/cf8bkjprah98nxyuttx9o2r8edxfbvjw7t1f55xv5fpi';

@@ -345,17 +345,18 @@
             <div class="mstatus live">LIVE</div>
           </div>
           <div class="table-wrap">
-            <table class="data-table" aria-label="Recent $BASIS transactions">
+            <table class="data-table activity-table" aria-label="Recent $BASIS transactions">
               <thead>
                 <tr>
-                  <th scope="col">TX HASH</th>
-                  <th scope="col">SLOT</th>
-                  <th scope="col">STATUS</th>
+                  <th scope="col">TYPE</th>
+                  <th scope="col" class="num">$BASIS</th>
+                  <th scope="col" class="num">SOL</th>
+                  <th scope="col">WALLET</th>
                   <th scope="col">TIME</th>
                 </tr>
               </thead>
               <tbody id="txTableBody">
-                <tr><td colspan="4" class="tx-empty">LOADING…</td></tr>
+                <tr><td colspan="5" class="tx-empty">LOADING…</td></tr>
               </tbody>
             </table>
           </div>

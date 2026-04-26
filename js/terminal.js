@@ -3,7 +3,7 @@
  * Side-effects only module; no exports.
  */
 
-import { BASIS_MINT, HELIUS_URL, HELIUS_TXS_URL, BASIS_SUPPLY, DEX_LINK } from './config.js';
+import { BASIS_MINT, HELIUS_URL, HELIUS_TXS_URL, BASIS_SUPPLY, DEX_LINK, heliusAddrTxsUrl } from './config.js';
 
 /* ────────────────────────────────────────────────────────────
    Utilities
@@ -407,16 +407,162 @@ function initPriceListener() {
    Recent transactions
    ──────────────────────────────────────────────────────────── */
 
-// The dashboard's recent-activity table has 4 columns: TX HASH, SLOT,
-// STATUS, TIME. The TX HASH cell already wraps the signature in a Solscan
-// link so we don't need a separate explorer-link column.
-function renderSkeletonRows(tbody, count = 5) {
+/* ────────────────────────────────────────────────────────────
+   Activity feed — Helius enhanced-tx parsing
+   Patterns mirror basis-bot/src/blockchain/parser.py: identify the trader
+   from BASIS tokenTransfers, classify direction by SOL flow in
+   nativeTransfers, and exclude pool/system addresses from "trader".
+   The solana-dev skill's "untrusted on-chain data" rule applies: we
+   validate every base58 string before interpolating into the DOM.
+   ──────────────────────────────────────────────────────────── */
+
+// Pool / system / DEX program accounts that should never be displayed as
+// the "trader" — they're counterparties, not users. Sourced from the
+// basis-bot parser's hardcoded list (the bot has been running against
+// $BASIS for weeks with this set).
+const SYSTEM_ACCOUNTS = new Set([
+  '11111111111111111111111111111111',                       // System Program
+  'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',           // SPL Token
+  'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJe1bPX',          // Associated Token
+  '675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8',          // Raydium AMM
+  'whirLbMiicVdio4qvUfM5KAg6Ct8VwpYzGff3uctyCc',           // Orca Whirlpool
+  '6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P',           // pump.fun
+  'JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4',           // Jupiter v6
+  'ComputeBudget111111111111111111111111111111',
+  'SysvarRent111111111111111111111111111111111',
+  'SysvarC1ock11111111111111111111111111111111',
+]);
+
+// Cosmetic mapping from Helius `source` enum → terse display badge.
+const SOURCE_LABEL = {
+  PUMP_FUN: 'pump.fun',
+  RAYDIUM:  'raydium',
+  ORCA:     'orca',
+  JUPITER:  'jupiter',
+  METEORA:  'meteora',
+  PHOENIX:  'phoenix',
+  LIFINITY: 'lifinity',
+  SOLANA_PROGRAM_LIBRARY: 'spl',
+  SYSTEM_PROGRAM: 'system',
+};
+
+// Strict base58 validation. Helius is trusted but transitively-rendered
+// strings should never be assumed safe — defense-in-depth from the
+// solana-dev skill's "treat on-chain data as untrusted" guidance.
+const BASE58_RE = /^[1-9A-HJ-NP-Za-km-z]{32,90}$/;
+const isValidPubkey = (s) => typeof s === 'string' && BASE58_RE.test(s);
+const isValidSig    = (s) => typeof s === 'string' && BASE58_RE.test(s);
+
+// Format a $BASIS amount for the table. Tokens with 6 decimals can be huge,
+// so use compact notation past 1k for readability without losing scale.
+function fmtBasisAmount(n) {
+  if (!Number.isFinite(n) || n <= 0) return '—';
+  if (n >= 1_000_000) return (n / 1_000_000).toFixed(2) + 'M';
+  if (n >= 1_000)     return (n / 1_000).toFixed(1) + 'k';
+  if (n >= 1)         return n.toLocaleString(undefined, { maximumFractionDigits: 0 });
+  return n.toFixed(2);
+}
+
+// Format SOL amount — small numbers need precision, larger ones don't.
+function fmtSolAmount(n) {
+  if (!Number.isFinite(n) || n <= 0) return '—';
+  if (n >= 100) return n.toFixed(1);
+  if (n >= 1)   return n.toFixed(3);
+  return n.toFixed(4);
+}
+
+function shortAddr(addr) {
+  if (!isValidPubkey(addr)) return '—';
+  return addr.slice(0, 4) + '…' + addr.slice(-4);
+}
+
+/**
+ * Parse a Helius enhanced transaction into a renderable activity row.
+ * Returns null when the tx isn't a meaningful $BASIS event we want to show.
+ *
+ * Direction classification (mirrors basis-bot/parser.py):
+ *   BUY      — $BASIS flowing TO a non-system wallet AND SOL flowing FROM
+ *              that same wallet → user spent SOL to acquire $BASIS
+ *   SELL     — $BASIS flowing FROM a non-system wallet AND SOL flowing TO
+ *              that same wallet → user dumped $BASIS for SOL
+ *   TRANSFER — $BASIS moved between two non-system wallets, no SOL leg
+ *   RECEIVE  — inbound $BASIS without a corresponding SOL outflow
+ *              (airdrop, claim, mint, LP withdraw, etc.)
+ */
+function parseBasisActivity(tx) {
+  if (!tx || typeof tx !== 'object') return null;
+  if (tx.transactionError) return null;        // failed tx — skip
+
+  const sig = tx.signature;
+  if (!isValidSig(sig)) return null;
+
+  const tokenTransfers  = Array.isArray(tx.tokenTransfers)  ? tx.tokenTransfers  : [];
+  const nativeTransfers = Array.isArray(tx.nativeTransfers) ? tx.nativeTransfers : [];
+
+  const basisLegs = tokenTransfers.filter(t => t && t.mint === BASIS_MINT);
+  if (basisLegs.length === 0) return null;
+
+  // Aggregate per non-system user account so multi-instruction swaps that
+  // split a single user's flow across several legs collapse correctly.
+  const inflow  = new Map();
+  const outflow = new Map();
+  for (const leg of basisLegs) {
+    const amt = Number(leg.tokenAmount);
+    if (!Number.isFinite(amt) || amt <= 0) continue;
+    const to   = leg.toUserAccount;
+    const from = leg.fromUserAccount;
+    if (isValidPubkey(to)   && !SYSTEM_ACCOUNTS.has(to))   inflow.set(to,   (inflow.get(to)   ?? 0) + amt);
+    if (isValidPubkey(from) && !SYSTEM_ACCOUNTS.has(from)) outflow.set(from, (outflow.get(from) ?? 0) + amt);
+  }
+
+  const candidates = [
+    ...[...inflow.entries()].map(([w, a])  => ({ wallet: w, amount: a, direction: 'in'  })),
+    ...[...outflow.entries()].map(([w, a]) => ({ wallet: w, amount: a, direction: 'out' })),
+  ].sort((a, b) => b.amount - a.amount);
+
+  if (candidates.length === 0) return null;
+  const winner = candidates[0];
+
+  let solOut = 0, solIn = 0;
+  for (const nt of nativeTransfers) {
+    if (!nt) continue;
+    const amount = Number(nt.amount);
+    if (!Number.isFinite(amount) || amount <= 0) continue;
+    if (nt.fromUserAccount === winner.wallet) solOut += amount;
+    if (nt.toUserAccount   === winner.wallet) solIn  += amount;
+  }
+  const netSolOut = solOut - solIn;   // positive = wallet net-spent SOL → buy
+
+  let type, solAmount;
+  if (winner.direction === 'in' && netSolOut > 0) {
+    type = 'BUY';      solAmount = netSolOut / 1e9;
+  } else if (winner.direction === 'out' && netSolOut < 0) {
+    type = 'SELL';     solAmount = Math.abs(netSolOut) / 1e9;
+  } else if (winner.direction === 'out') {
+    type = 'TRANSFER'; solAmount = 0;
+  } else {
+    type = 'RECEIVE';  solAmount = 0;
+  }
+
+  return {
+    sig,
+    timestamp: Number(tx.timestamp) || 0,
+    type,
+    source:    typeof tx.source === 'string' ? tx.source : null,
+    wallet:    winner.wallet,
+    basisAmount: winner.amount,
+    solAmount,
+  };
+}
+
+function renderSkeletonRows(tbody, count = 6) {
   tbody.innerHTML = '';
   for (let i = 0; i < count; i++) {
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td><span class="mc-val loading">——</span></td>
-      <td><span class="mc-val loading">——</span></td>
+      <td class="num"><span class="mc-val loading">——</span></td>
+      <td class="num"><span class="mc-val loading">——</span></td>
       <td><span class="mc-val loading">——</span></td>
       <td><span class="mc-val loading">——</span></td>
     `;
@@ -424,72 +570,114 @@ function renderSkeletonRows(tbody, count = 5) {
   }
 }
 
-function renderEmptyRow(tbody, message = 'No transactions found') {
-  tbody.innerHTML = `<tr><td colspan="4" class="tx-empty">${message}</td></tr>`;
+function renderEmptyRow(tbody, message = 'No recent activity') {
+  tbody.innerHTML = `<tr><td colspan="5" class="tx-empty">${message}</td></tr>`;
 }
 
+// Build a single activity row. All interpolated strings are pre-validated
+// (sig/wallet) or pre-mapped (type/source). No untrusted on-chain string
+// reaches innerHTML directly.
+function buildActivityRow(act) {
+  const tr = document.createElement('tr');
+  tr.className = 'activity-row';
+  tr.dataset.sig = act.sig;
+  tr.tabIndex = 0;
+  tr.setAttribute('role', 'link');
+  tr.setAttribute('aria-label',
+    `${act.type} ${fmtBasisAmount(act.basisAmount)} BASIS${act.solAmount > 0 ? ` for ${fmtSolAmount(act.solAmount)} SOL` : ''}, ${timeAgo(act.timestamp)}`
+  );
+
+  const typeCls = `tx-type type-${act.type.toLowerCase()}`;
+  const rawSource = act.source ? (SOURCE_LABEL[act.source] ?? act.source.toLowerCase().replace(/_/g, ' ')) : '';
+  // Sanitize source label one more time before innerHTML — defense in depth.
+  const safeSource = rawSource.replace(/[^a-z0-9 .]/gi, '').slice(0, 16);
+
+  tr.innerHTML = `
+    <td>
+      <span class="${typeCls}">${act.type}</span>
+      ${safeSource ? `<span class="tx-source">${safeSource}</span>` : ''}
+    </td>
+    <td class="num amount-${act.type.toLowerCase()}">${fmtBasisAmount(act.basisAmount)}</td>
+    <td class="num">${act.solAmount > 0 ? fmtSolAmount(act.solAmount) : '—'}</td>
+    <td>
+      <a class="tx-link wallet-link"
+         href="https://solscan.io/account/${act.wallet}"
+         target="_blank" rel="noopener noreferrer"
+         title="${act.wallet}">${shortAddr(act.wallet)}</a>
+    </td>
+    <td><span class="tx-time" title="${new Date(act.timestamp * 1000).toUTCString()}">${timeAgo(act.timestamp)}</span></td>
+  `;
+
+  // Whole-row click → solscan tx (bigger hit target, especially on mobile).
+  // Wallet cell stops propagation so it goes to the account page instead.
+  tr.addEventListener('click', (e) => {
+    if (e.target.closest('a')) return;       // honor inner link clicks
+    window.open(`https://solscan.io/tx/${act.sig}`, '_blank', 'noopener,noreferrer');
+  });
+  tr.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      window.open(`https://solscan.io/tx/${act.sig}`, '_blank', 'noopener,noreferrer');
+    }
+  });
+
+  return tr;
+}
+
+// Track the most recent rendered sig so polling can highlight new rows
+// (the "LIVE" status pill becomes earned, not aspirational).
+let _lastTopSig = null;
+
 async function fetchRecentTxs() {
-  // The HTML table puts its id on the <tbody> directly, not the <table>.
-  // (Earlier refactor missed updating this selector — symptom was the
-  // dashboard sitting on "LOADING…" forever because the early-return
-  // fired and the skeleton/data-render path never ran.)
   const tbody = document.getElementById('txTableBody');
   if (!tbody) return;
 
-  renderSkeletonRows(tbody, 5);
+  if (!tbody.dataset.populated) {
+    renderSkeletonRows(tbody, 6);
+  }
 
   try {
-    const res = await fetch(HELIUS_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        jsonrpc: '2.0',
-        id: 1,
-        method: 'getSignaturesForAddress',
-        params: [BASIS_MINT, { limit: 20 }],
-      }),
-    });
-
+    const url = heliusAddrTxsUrl(BASIS_MINT, { limit: 30 });
+    const res = await fetch(url);
     if (!res.ok) throw new Error('HTTP ' + res.status);
 
-    const data = await res.json();
-    const sigs  = data?.result;
+    const txs = await res.json();
+    if (!Array.isArray(txs)) throw new Error('Unexpected response shape');
 
-    if (!sigs || sigs.length === 0) {
+    const acts = txs.map(parseBasisActivity).filter(Boolean).slice(0, 12);
+
+    if (acts.length === 0) {
       renderEmptyRow(tbody);
       return;
     }
 
+    const newTopSig = acts[0].sig;
+    const isPoll = !!tbody.dataset.populated;
+    const previousSigs = isPoll
+      ? new Set(Array.from(tbody.querySelectorAll('tr.activity-row')).map(r => r.dataset.sig))
+      : new Set();
+
     tbody.innerHTML = '';
+    for (const act of acts) {
+      const row = buildActivityRow(act);
+      // Highlight rows that didn't exist on the previous render — turns the
+      // "LIVE" pill into earned signal.
+      if (isPoll && !previousSigs.has(act.sig)) {
+        row.classList.add('row-fresh');
+        setTimeout(() => row.classList.remove('row-fresh'), 2400);
+      }
+      tbody.appendChild(row);
+    }
 
-    sigs.slice(0, 20).forEach(tx => {
-      const sig   = tx.signature ?? '';
-      const slot  = tx.slot      ?? '—';
-      const btime = tx.blockTime;
-      const err   = tx.err;
-
-      const shortSig  = sig.length >= 8 ? sig.slice(0, 4) + '…' + sig.slice(-4) : sig;
-      const timeStr   = btime ? timeAgo(btime) : '—';
-      const statusStr = err ? '✗' : '✓';
-      const statusCls = err ? 'type-sell' : 'type-buy';
-
-      const tr = document.createElement('tr');
-      // Column order matches the table headers: TX HASH, SLOT, STATUS, TIME.
-      // TX HASH is the explorer link so a separate ↗ column would be redundant.
-      tr.innerHTML = `
-        <td>
-          <a class="tx-link" href="https://solscan.io/tx/${sig}" target="_blank" rel="noopener noreferrer">${shortSig}</a>
-        </td>
-        <td>${Number(slot).toLocaleString()}</td>
-        <td class="${statusCls}">${statusStr}</td>
-        <td>${timeStr}</td>
-      `;
-      tbody.appendChild(tr);
-    });
+    _lastTopSig = newTopSig;
+    tbody.dataset.populated = '1';
 
   } catch (err) {
     console.warn('[terminal] fetchRecentTxs error:', err);
-    renderEmptyRow(tbody, 'Failed to load transactions');
+    if (!tbody.dataset.populated) {
+      renderEmptyRow(tbody, 'Failed to load activity — retrying…');
+    }
+    // If we already have rows, keep them; the next poll will retry silently.
   }
 }
 
@@ -552,4 +740,16 @@ document.addEventListener('DOMContentLoaded', () => {
   initDashRefresh();
   initGlobalSearch();
   fetchRecentTxs();
+
+  // Auto-refresh the activity feed every 60s. 100 credits per call × 60 polls
+  // /hour = 6k credits/hour for an idle dashboard tab — fits comfortably in
+  // the Free plan budget. We skip refresh while the tab is hidden to avoid
+  // burning credits when nobody's looking. visibilitychange picks up the
+  // refresh again as soon as the user returns.
+  let pollTimer = setInterval(() => {
+    if (!document.hidden) fetchRecentTxs();
+  }, 60_000);
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) fetchRecentTxs();
+  });
 });

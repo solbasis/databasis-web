@@ -350,6 +350,116 @@
   font-size: 0.76rem;
 }
 
+/* ── Activity feed (BUY/SELL/TRANSFER table) ───────────────── */
+
+/* Right-align numeric columns and use tabular figures so amounts visually
+   stack regardless of digit count. */
+.data-table.activity-table th.num,
+.data-table.activity-table td.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Whole row is clickable → solscan tx. Cursor + hover signal that. */
+.activity-row { cursor: pointer; transition: background .12s; }
+.activity-row:hover td  { background: rgba(120, 177, 90, 0.04); }
+.activity-row:focus-visible {
+  outline: 1px solid var(--g, #78b15a);
+  outline-offset: -1px;
+}
+
+/* TYPE pill — color-coded so a degen scanning the column reads the
+   buy/sell ratio at a glance. */
+.tx-type {
+  display: inline-block;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  vertical-align: middle;
+}
+.tx-type.type-buy {
+  color: #6dd97d;
+  background: rgba(109, 217, 125, 0.10);
+  border-color: rgba(109, 217, 125, 0.32);
+}
+.tx-type.type-sell {
+  color: #ff9494;
+  background: rgba(255, 106, 106, 0.10);
+  border-color: rgba(255, 106, 106, 0.34);
+}
+.tx-type.type-transfer {
+  color: #c4c79a;
+  background: rgba(196, 199, 154, 0.06);
+  border-color: rgba(196, 199, 154, 0.22);
+}
+.tx-type.type-receive {
+  color: #d8a93a;       /* amber — distinguishable from BUY without confusing it */
+  background: rgba(216, 169, 58, 0.08);
+  border-color: rgba(216, 169, 58, 0.30);
+}
+
+/* DEX source chip — small, subdued, sits next to the TYPE pill. */
+.tx-source {
+  display: inline-block;
+  margin-left: 8px;
+  font-size: 0.6rem;
+  letter-spacing: 0.5px;
+  color: var(--text-mute, rgba(120, 177, 90, 0.45));
+  background: rgba(120, 177, 90, 0.05);
+  border: 1px solid rgba(120, 177, 90, 0.12);
+  padding: 1px 6px;
+  border-radius: 3px;
+  vertical-align: middle;
+  text-transform: lowercase;
+}
+
+/* Amount cells get a faint color hint matching the TYPE — eye-trains the
+   reader without needing to look at the pill column. */
+.amount-buy  { color: #6dd97d; }
+.amount-sell { color: #ff9494; }
+.amount-transfer,
+.amount-receive { color: var(--text); }
+
+/* Wallet link — subtler than the row's own click target so the eye knows
+   it's a separate destination (account page vs tx page). */
+.wallet-link {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.3px;
+}
+
+/* Time cell — right-most, slightly dim so it reads as metadata. */
+.tx-time {
+  color: var(--text-dim, rgba(120, 177, 90, 0.55));
+  font-size: 0.74rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Fresh-row highlight on poll: a single soft glow that fades out so the
+   user catches new activity in their peripheral vision. */
+@keyframes activity-fresh-flash {
+  0%   { background: rgba(109, 217, 125, 0.18); }
+  100% { background: rgba(109, 217, 125, 0.00); }
+}
+.activity-row.row-fresh td {
+  animation: activity-fresh-flash 2.4s ease-out;
+}
+
+/* Mobile — drop the SOL column on narrow screens to keep the table readable.
+   The TYPE pill + $BASIS amount carry the signal; SOL detail is a tap
+   away in the linked solscan tx. */
+@media (max-width: 700px) {
+  .activity-table th:nth-child(3),
+  .activity-table td:nth-child(3) { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .activity-row.row-fresh td { animation: none; }
+}
+
 /* ── Ecosystem stack (sidebar column) ─────────────────────── */
 .eco-stack {
   display: flex;
