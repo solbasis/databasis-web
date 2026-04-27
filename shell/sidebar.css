@@ -1,0 +1,407 @@
+/* ════════════════════════════════════════════════════════════════════════
+   BASIS Shell — shared sidebar across the ecosystem
+   Hosted at https://databasis.info/shell/sidebar.css
+   Imported by burn / chat / DAO / deployer / game / art / terminal.
+   Self-scoped under .basis-shell so it never collides with host app CSS.
+   ════════════════════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+/* Scoped tokens — won't leak into host app's :root */
+.basis-shell, .basis-shell-drawer {
+  --bs-bg:        #060904;
+  --bs-bg2:       #0a1408;
+  --bs-surface:   rgba(20,35,18,.78);
+  --bs-g:         #78b15a;
+  --bs-g-bri:     #a4e07e;
+  --bs-g-hot:     #c2f08e;
+  --bs-g15:       rgba(120,177,90,.15);
+  --bs-g08:       rgba(120,177,90,.08);
+  --bs-g03:       rgba(120,177,90,.03);
+  --bs-text:      rgba(176,225,148,.96);
+  --bs-text-dim:  rgba(140,190,118,.66);
+  --bs-text-mute: rgba(130,180,108,.42);
+  --bs-border:    rgba(120,177,90,.20);
+  --bs-border-hi: rgba(120,177,90,.40);
+  --bs-pos:       #6dd97d;
+  --bs-neg:       #ff6a6a;
+  --bs-mono:      'IBM Plex Mono', ui-monospace, monospace;
+  --bs-rail-w:    56px;
+  --bs-drawer-w:  300px;
+}
+
+/* Push host app content right by the rail width — applied via JS adding
+   the .basis-shell-active class to <html> after auto-mount. */
+html.basis-shell-active body { padding-left: var(--bs-rail-w); }
+@media (max-width: 600px) {
+  html.basis-shell-active body { padding-left: 48px; }
+  .basis-shell { width: 48px !important; }
+}
+
+/* ════ The always-visible icon rail ════ */
+.basis-shell {
+  position: fixed;
+  left: 0; top: 0; bottom: 0;
+  width: var(--bs-rail-w);
+  background: var(--bs-bg);
+  border-right: 1px solid var(--bs-border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 14px 0 16px;
+  font-family: var(--bs-mono);
+  z-index: 9999;
+  box-shadow: 0 0 24px rgba(0,0,0,.35);
+}
+
+.basis-shell *, .basis-shell-drawer * { box-sizing: border-box; }
+
+/* Logo at top — clickable, opens drawer */
+.bs-logo {
+  width: 38px; height: 38px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  font-size: 22px;
+  line-height: 1;
+  border-radius: 8px;
+  filter: drop-shadow(0 0 8px rgba(255,106,106,.45));
+  transition: transform .15s, background .15s;
+  user-select: none;
+  margin-bottom: 12px;
+}
+.bs-logo:hover { background: var(--bs-g08); transform: translateY(-1px); }
+
+/* Divider */
+.bs-divider {
+  width: 24px; height: 1px;
+  background: var(--bs-border);
+  margin: 6px 0 10px;
+}
+
+/* Nav stack */
+.bs-nav {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.bs-app {
+  width: 40px; height: 40px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--bs-text-dim);
+  border-radius: 8px;
+  font-size: 18px;
+  line-height: 1;
+  position: relative;
+  transition: background .15s, color .15s, transform .12s;
+}
+.bs-app:hover {
+  background: var(--bs-g08);
+  color: var(--bs-text);
+  transform: translateY(-1px);
+}
+.bs-app.active {
+  background: var(--bs-g15);
+  color: var(--bs-g-hot);
+  box-shadow: inset 2px 0 0 var(--bs-g-bri);
+}
+.bs-app::after {
+  /* tooltip on hover */
+  content: attr(data-name);
+  position: absolute;
+  left: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--bs-bg2);
+  color: var(--bs-text);
+  border: 1px solid var(--bs-border-hi);
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .15s, transform .15s;
+  z-index: 10000;
+}
+.bs-app:hover::after {
+  opacity: 1;
+  transform: translateY(-50%) translateX(2px);
+}
+
+/* Status pip at the very bottom */
+.bs-pip {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--bs-pos);
+  box-shadow: 0 0 6px var(--bs-pos);
+  animation: bs-beat 1.6s ease-in-out infinite;
+  margin-top: 12px;
+}
+@keyframes bs-beat {
+  0%, 100% { transform: scale(1); opacity: .9; }
+  50%      { transform: scale(1.4); opacity: 1; }
+}
+
+/* ════ The expanded drawer (overlays content) ════ */
+.basis-shell-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(4,8,2,.55);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  z-index: 9997;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s;
+}
+.basis-shell-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.basis-shell-drawer {
+  position: fixed;
+  left: var(--bs-rail-w);
+  top: 0; bottom: 0;
+  width: var(--bs-drawer-w);
+  background: linear-gradient(180deg, var(--bs-bg2) 0%, var(--bs-bg) 100%);
+  border-right: 1px solid var(--bs-border-hi);
+  transform: translateX(-100%);
+  transition: transform .22s cubic-bezier(.4,0,.2,1);
+  z-index: 9998;
+  font-family: var(--bs-mono);
+  color: var(--bs-text);
+  overflow-y: auto;
+  box-shadow: 8px 0 32px rgba(0,0,0,.5);
+}
+.basis-shell-drawer.open { transform: translateX(0); }
+
+@media (max-width: 600px) {
+  .basis-shell-drawer { left: 48px; width: calc(100vw - 48px); }
+}
+
+.bs-drawer-head {
+  padding: 16px 18px 14px;
+  border-bottom: 1px solid var(--bs-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.bs-drawer-title {
+  font-size: 0.78rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--bs-g-bri);
+  font-weight: 600;
+}
+.bs-drawer-close {
+  background: transparent;
+  border: 1px solid var(--bs-border);
+  color: var(--bs-text-dim);
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: color .12s, border-color .12s;
+}
+.bs-drawer-close:hover { color: var(--bs-text); border-color: var(--bs-border-hi); }
+
+.bs-section {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--bs-border);
+}
+.bs-section-label {
+  font-size: 0.58rem;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--bs-text-mute);
+  margin-bottom: 8px;
+}
+
+/* Price ticker */
+.bs-price {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-variant-numeric: tabular-nums;
+}
+.bs-price-val {
+  font-size: 1.4rem;
+  color: var(--bs-g-hot);
+  font-weight: 600;
+  letter-spacing: .5px;
+  text-shadow: 0 0 10px rgba(120,177,90,.30);
+}
+.bs-price-val.loading {
+  color: var(--bs-text-mute);
+  letter-spacing: 4px;
+}
+.bs-price-chg {
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+.bs-price-chg.pos { color: var(--bs-pos); }
+.bs-price-chg.neg { color: var(--bs-neg); }
+.bs-price-meta {
+  font-size: 0.62rem;
+  color: var(--bs-text-mute);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+/* Wallet pill */
+.bs-wallet {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid var(--bs-border);
+  border-radius: 8px;
+  background: var(--bs-g03);
+  font-size: 0.78rem;
+  text-decoration: none;
+  color: var(--bs-text);
+  transition: border-color .12s, background .12s;
+}
+.bs-wallet:hover {
+  border-color: var(--bs-border-hi);
+  background: var(--bs-g08);
+  color: var(--bs-g-hot);
+}
+.bs-wallet.disconnected {
+  color: var(--bs-text-mute);
+}
+.bs-wallet-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.bs-wallet-dot.on  { background: var(--bs-pos); box-shadow: 0 0 6px var(--bs-pos); }
+.bs-wallet-dot.off { background: var(--bs-text-mute); }
+.bs-wallet-addr {
+  flex: 1;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: .3px;
+}
+.bs-wallet-arrow {
+  color: var(--bs-text-mute);
+  font-size: 11px;
+}
+
+/* Full app list (with names + descriptions) */
+.bs-app-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.bs-app-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 10px;
+  text-decoration: none;
+  color: var(--bs-text);
+  border-radius: 6px;
+  transition: background .12s, color .12s;
+}
+.bs-app-row:hover { background: var(--bs-g08); color: var(--bs-g-hot); }
+.bs-app-row.active {
+  background: var(--bs-g15);
+  color: var(--bs-g-hot);
+  box-shadow: inset 2px 0 0 var(--bs-g-bri);
+}
+.bs-app-row-icon {
+  font-size: 14px;
+  width: 20px;
+  flex-shrink: 0;
+  text-align: center;
+}
+.bs-app-row-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+.bs-app-row-name {
+  font-size: 0.78rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.bs-app-row-desc {
+  font-size: 0.62rem;
+  color: var(--bs-text-mute);
+  letter-spacing: .3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: none;
+}
+.bs-app-row.active .bs-app-row-desc { color: var(--bs-text-dim); }
+
+/* Recent activity line */
+.bs-activity {
+  font-size: 0.72rem;
+  color: var(--bs-text-dim);
+  letter-spacing: .3px;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.5;
+}
+.bs-activity b { color: var(--bs-g-bri); font-weight: 500; }
+.bs-activity-time { color: var(--bs-text-mute); font-size: 0.62rem; }
+
+/* Drawer footer */
+.bs-foot {
+  padding: 12px 18px;
+  font-size: 0.6rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--bs-text-mute);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.bs-foot-pip {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--bs-g);
+  box-shadow: 0 0 5px var(--bs-g);
+  animation: bs-beat 1.6s ease-in-out infinite;
+}
+.bs-foot a { color: inherit; text-decoration: none; }
+.bs-foot a:hover { color: var(--bs-g-bri); }
+
+/* Focus ring (keyboard accessibility) */
+.basis-shell *:focus-visible,
+.basis-shell-drawer *:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--bs-bg), 0 0 0 4px var(--bs-g);
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .basis-shell-drawer,
+  .basis-shell-overlay,
+  .bs-app, .bs-app-row, .bs-logo,
+  .bs-pip, .bs-foot-pip {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Print: hide the shell */
+@media print {
+  .basis-shell, .basis-shell-drawer, .basis-shell-overlay { display: none !important; }
+  html.basis-shell-active body { padding-left: 0 !important; }
+}
