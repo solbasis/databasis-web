@@ -23,6 +23,17 @@
   transition: transform 0.22s ease;
 }
 
+/* When BASIS Shell is active (loaded via /shell/sidebar.js), the 56px shell
+   rail occupies the left edge. Push our own fixed sidebar + topbar right by
+   that amount so they don't sit underneath the shell rail. Mobile uses 48px
+   for the shell rail width. */
+html.basis-shell-active .sidebar { left: 56px; }
+html.basis-shell-active .topbar  { left: calc(var(--sidebar-w) + 56px); }
+@media (max-width: 600px) {
+  html.basis-shell-active .sidebar { left: 48px; }
+  html.basis-shell-active .topbar  { left: calc(var(--sidebar-w) + 48px); }
+}
+
 /* ── Sidebar logo / header ────────────────────────────────── */
 .sidebar-logo {
   height: var(--topbar-h);
